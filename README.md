@@ -15,4 +15,15 @@
 ### 2.发送公共号消息，修改消息待办状态 ###
 操作类是`com.lightdemo.postmsg.MsgSend`
 
+###基本样例地址
+- 字典轻应用  :
+http://127.0.0.1:8080/lightdemo
+- ticket身份验证  :
+http://127.0.0.1:8080/lightdemo/views/jsp/person.jsp
+- jsbridge : 
+http://127.0.0.1:8080/lightdemo/views/jsp/jsbridge.jsp
+
+- hightchart : http://127.0.0.1:8080/lightdemo/views/hightchart/examples/pie-basic/index.htm
+
+
 
