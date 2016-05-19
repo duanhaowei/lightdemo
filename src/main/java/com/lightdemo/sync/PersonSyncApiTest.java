@@ -40,7 +40,7 @@ public class PersonSyncApiTest {
 	
 	public static void main(String[] args) {
 		PersonSyncApiTest psa = new PersonSyncApiTest();
-		psa.getPerson();
+		psa.addDept();
 	}
 	/**
 	 * 添加部门信息
@@ -226,7 +226,7 @@ public class PersonSyncApiTest {
 	private String setDepartment(){
 		DeptDTO depts = new DeptDTO();
 		depts.setEid(EID);
-		depts.setDepartments(new String[]{"合作伙伴\\福州思博睿管理咨询有限公司"});
+		depts.setDepartments(new String[]{"分公司\\北京分公司"});
 		JSONObject jo = JSONObject.fromObject(depts);
 		return jo.toString();
 	}

@@ -1,4 +1,13 @@
 package com.lightdemo.postmsg;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 /**
  * 发送消息控制类
  * @author cjqbrave@163.com
@@ -16,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lightdemo.model.Common;
+import com.lightdemo.util.FileUtil;
 import com.lightdemo.util.PropertiesUtil;
 import com.lightdemo.util.Utils;
 
@@ -35,6 +45,10 @@ public class MsgSend {
 	private String XT_SERVERNAME;
 	@Value("${APPID}")
 	private String APPID;
+	public static int DEFAULT_BUFFER_SIZE = 1024;
+	
+	String imgName = "小兔子.png";
+	String imgFilePath= "C:/Users/chen/Pictures/小兔子.png";
 	
 	@RequestMapping(value = { "msgmain" })
 	public String msgmain(){
@@ -77,7 +91,7 @@ public class MsgSend {
 		
 		try {
 			String random = String.valueOf(Math.random() * 100);
-			String nowDate = new SimpleDateFormat("yyyy-MM-dd HH:mm")
+			String nowDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 					.format(new Date());
 			long time_1 = System.currentTimeMillis();
 			// form
@@ -89,14 +103,12 @@ public class MsgSend {
 			String[] data = { EID, PUBACC, PUBACC_KEY, random,
 					String.valueOf(time_1) };
 			from.put("pubtoken", Utils.sha(data));
-
 			// to
 			JSONArray tos = new JSONArray();
-			
 			JSONObject to = new JSONObject();
 			to.put("no", EID);
 			to.put("user", toUserList);
-			to.put("code", "0");
+			
 			tos.add(to);
 
 			JSONObject msg = new JSONObject();
@@ -105,6 +117,17 @@ public class MsgSend {
 				msg.put("appid", APPID);
 				msg.put("todo", 0);
 				msg.put("text", text);
+			} else if(type == 6) {
+				JSONArray list = new JSONArray();
+				JSONObject msgJson = new JSONObject();
+				msgJson.put("date", nowDate);
+				msgJson.put("title", "标题");
+				msgJson.put("text", "测试图文消息");
+				msgJson.put("name", imgName);
+				msgJson.put("pic", FileUtil.encodeBase64File(imgFilePath));
+				list.add(msgJson);
+				msg.put("model", 2);
+				msg.put("list", list);
 			} else {
 				msg.put("text", text);
 			}
@@ -113,7 +136,9 @@ public class MsgSend {
 			content.put("to", tos);
 			content.put("type", type);
 			content.put("msg", msg);
-			String rs = Utils.sendPostO(XT_SERVERNAME+"/pubacc/pubsend", content.toString());
+			String contentStr = content.toString();
+			System.out.println(contentStr);
+			String rs = Utils.sendPostO(XT_SERVERNAME+"/pubacc/pubsend", contentStr);
 			System.out.println("结果是---"+rs);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -122,6 +147,8 @@ public class MsgSend {
 		return reJson.toString();
 	
 	}
+	
+	
 	/**
 	 * 修改待办状态的接口
 	 */
@@ -150,7 +177,7 @@ public class MsgSend {
 		ms.PUBACC = cm.getPUBACC();
 		ms.PUBACC_KEY = cm.getPUBACC_KEY();
 		ms.APPID = cm.getAPPID();
-		ms.postmsg(System.currentTimeMillis()+"",cm.getOPENIDS(), 5);
+		ms.postmsg(System.currentTimeMillis()+"",cm.getOPENIDS(), 6);
 	}
 	
 }

@@ -122,6 +122,8 @@ public class Utils {
 					result.append(line + "\n");
 				}
 				br.close();
+			} else {
+				System.out.println("found error and error code is  " +  HttpResult);
 			}
 
 		} catch (Exception e) {
