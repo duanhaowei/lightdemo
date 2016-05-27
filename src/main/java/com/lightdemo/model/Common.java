@@ -14,6 +14,11 @@ public class Common {
 	private String WEIBOSERVER;
 	private String OPENIDS;
 	private String MSGID;
+	private String CONSUMERKEY;
+	private String CONSUMERSECRET;
+	private String EMAIL;
+	private String PASSWORD;
+	
 	public String getAPPID() {
 		return APPID;
 	}
@@ -68,4 +73,29 @@ public class Common {
 	public void setMSGID(String mSGID) {
 		MSGID = mSGID;
 	}
+	public String getCONSUMERKEY() {
+		return CONSUMERKEY;
+	}
+	public void setCONSUMERKEY(String cONSUMERKEY) {
+		CONSUMERKEY = cONSUMERKEY;
+	}
+	public String getCONSUMERSECRET() {
+		return CONSUMERSECRET;
+	}
+	public void setCONSUMERSECRET(String cONSUMERSECRET) {
+		CONSUMERSECRET = cONSUMERSECRET;
+	}
+	public String getEMAIL() {
+		return EMAIL;
+	}
+	public void setEMAIL(String eMAIL) {
+		EMAIL = eMAIL;
+	}
+	public String getPASSWORD() {
+		return PASSWORD;
+	}
+	public void setPASSWORD(String pASSWORD) {
+		PASSWORD = pASSWORD;
+	}
 }
+
