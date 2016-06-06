@@ -58,7 +58,7 @@ public class WeiboDemo {
 		String url = "/snsapi/statuses/update.json";
 		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
 		Response res = http.post(weiboUrl + url, new PostParameter[]{
-				new PostParameter("status","男人哭吧哭吧不是罪")}, true);
+				new PostParameter("status","今天下了一场很大很大的雨，捉到一条很大很大的雨")}, true);
 		String result = res.getResponseAsString();
 		System.out.println("返回结果是：" + result);
 	}
