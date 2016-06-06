@@ -60,7 +60,7 @@ public class PersonSyncApiTest {
 	 * 添加人员信息
 	 */
 	public void addPerson(){
-		String  url = host  + "/openaccess/input/person/update";
+		String  url = host  + "/openaccess/input/person/add";
 		List <NameValuePair> nvps = new ArrayList <NameValuePair>();  
         nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));  
         nvps.add(new BasicNameValuePair("eid", EID));  
