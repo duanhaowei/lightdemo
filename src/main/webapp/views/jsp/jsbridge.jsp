@@ -10,7 +10,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 	<script type="text/javascript" src="<%=basePath%>views/js/jquery-2.1.4.min.js"></script>
 	
-	<script type="text/javascript" src="<%=basePath%>views/js/xtjs.js?201508131449" > </script>
+	<script src=”http://yun.kingdee.com/res/js/qingjs.js”></script>
 	
 		<!-- 新 Bootstrap 核心 CSS 文件 -->
 	<link rel="stylesheet" href="<%=basePath%>views/bootstrap-3.3.5-dist/css/bootstrap.min.css">

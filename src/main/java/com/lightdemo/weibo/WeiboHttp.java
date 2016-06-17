@@ -4,6 +4,7 @@ import com.lightdemo.model.Common;
 import com.lightdemo.util.PropertiesUtil;
 
 import weibo4j.WeiboException;
+import weibo4j.httpclient.AccessToken;
 import weibo4j.httpclient.HttpClient;
 
 
@@ -39,7 +40,8 @@ public class WeiboHttp {
 	    http.setAccessTokenURL(apiURL+"/oauth/access_token");
 	    http.setAuthorizationURL(apiURL+"/oauth/authorize");
 	    http.setOAuthConsumer(consumerKey, consumerSecret);//替换成自己申请的应用专属key和secret的
-	    http.getXAuthAccessToken(email, password, "client_auth");
+	    http.getXAuthAccessToken(email, password, "client_auth");//使用用户名和密码验证
+//	    http.setToken(token, tokenSecret);//直接使用现成的token验证
 	    System.out.println("email: " + email +"  password: " + password);
 	    System.out.println("consumerKey: " + consumerKey +"  consumerSecret: " + consumerSecret);
 	    return http;
