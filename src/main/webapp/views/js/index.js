@@ -51,7 +51,7 @@ $(document).ready(function(){
 				var persons = result.data.persons;
 				for(var i = 0; i < persons.length; i ++){
 					var temp = persons[i];
-					perArr = perArr + temp.personId+",";
+					perArr = perArr + temp.openId+",";
 					
 				}
 				perArr =perArr.substring(0, perArr.length-1);
