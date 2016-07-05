@@ -49,10 +49,19 @@ $(document).ready(function(){
 			if(result.success == true){
 				var perArr='';
 				var persons = result.data.persons;
+				var flag = 0;
 				for(var i = 0; i < persons.length; i ++){
 					var temp = persons[i];
 					perArr = perArr + temp.openId+",";
+					if(!temp.openId) {
+						flag = 1;
+						break;
+					}
 					
+				}
+				if(flag == 1) {
+					alert('找不到用户的openId,请选择组织架构中的人');
+					return;
 				}
 				perArr =perArr.substring(0, perArr.length-1);
 				alert(JSON.stringify(persons));
