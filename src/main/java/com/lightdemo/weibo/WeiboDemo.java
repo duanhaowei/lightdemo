@@ -44,12 +44,27 @@ public class WeiboDemo {
 		try {
 //			wb.uploadProfileImage("13417396677","04302","C:/Users/kingdee/Pictures/2.png");
 //			wb.uploadProfileImage("18028752937","04302","C:/Users/kingdee/Pictures/小兔子.png");
-			String img1 = "http://images.missyuan.com/attachments/day_081031/20081031_273ca1dfc0a97651ef26GQvSlLOvnTPN.png";
-			wb.uploadProfileImageByHUrl("18028752937","04302",img1);
+//			String img1 = "http://images.missyuan.com/attachments/day_081031/20081031_273ca1dfc0a97651ef26GQvSlLOvnTPN.png";
+//			wb.uploadProfileImageByHUrl("18028752937","04302",img1);
+//			wb.fetchWeibo();
+			wb.sendWeibo();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 发送微博的接口调用样例
+	 * @throws WeiboException
+	 */
+	private void fetchWeibo() throws WeiboException{
+		String url = "/snsapi/statuses/public_timeline.json";
+		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
+		Response res = http.post(weiboUrl + url, new PostParameter[]{}, true);
+		String result = res.getResponseAsString();
+		System.out.println("返回结果是：" + result);
+	}
+	
 	/**
 	 * 发送微博的接口调用样例
 	 * @throws WeiboException
