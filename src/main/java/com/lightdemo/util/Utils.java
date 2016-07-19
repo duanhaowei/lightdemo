@@ -41,51 +41,37 @@ public class Utils {
 	 * @param params 参数
 	 * @return
 	 */
-	public static String sendPost(String url, List<NameValuePair> params){
+	public static String sendPost(String url, List<NameValuePair> params) throws Exception{
 		HttpUriRequest httpPost = null;
-		try {
-			if(null != params) {
-				httpPost = RequestBuilder
-						.post()
-						.addHeader("Content-Type",
-								ContentType.APPLICATION_FORM_URLENCODED.toString())
-						.setEntity(new UrlEncodedFormEntity(params,"UTF-8"))
-						.setUri(url).build();
-			} else {
-				httpPost = RequestBuilder
-						.post()
-						.addHeader("Content-Type",
-								ContentType.APPLICATION_FORM_URLENCODED.toString())
-						.setUri(url).build();
-			}
-			
-		} catch (UnsupportedEncodingException e) {
-			logger.error("send http requset faile",e.getMessage());
+		if(null != params) {
+			httpPost = RequestBuilder
+					.post()
+					.addHeader("Content-Type",
+							ContentType.APPLICATION_FORM_URLENCODED.toString())
+					.setEntity(new UrlEncodedFormEntity(params,"UTF-8"))
+					.setUri(url).build();
+		} else {
+			httpPost = RequestBuilder
+					.post()
+					.addHeader("Content-Type",
+							ContentType.APPLICATION_FORM_URLENCODED.toString())
+					.setUri(url).build();
 		}
 		return sendHttpRequest(httpPost);
 	}
 	
 	
-	public static String sendHttpRequest(HttpUriRequest httpRequest) {
+	public static String sendHttpRequest(HttpUriRequest httpRequest) throws Exception{
 		HttpClient httpClient = HttpClients.createDefault();
-		try {
-			HttpResponse httpResponse = httpClient.execute(httpRequest);
-			if (isRequestSuccessful(httpResponse)) {
-				HttpEntity httpEntity = httpResponse.getEntity();
-				String response = EntityUtils.toString(httpEntity, "utf-8");
-				logger.info("http response", response); 
-				return response;
-			}
-		} catch (ClientProtocolException e) {
-			logger.error("send http requset faile,uri={}, exception={}",
-					httpRequest.getURI(), e);
-			return e.getMessage();
-		} catch (IOException e) {
-			logger.error("send http requset faile,uri={}, exception={}",
-					httpRequest.getURI(), e);
-			return e.getMessage();
+		HttpResponse httpResponse = httpClient.execute(httpRequest);
+		if (isRequestSuccessful(httpResponse)) {
+			HttpEntity httpEntity = httpResponse.getEntity();
+			String response = EntityUtils.toString(httpEntity, "utf-8");
+			logger.info("http response", response); 
+			return response;
+		} else {
+			return "错误的返回，"+httpResponse.toString();
 		}
-		return null;
 	}
 
 	private static boolean isRequestSuccessful(HttpResponse httpResponse) {

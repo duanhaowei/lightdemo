@@ -22,16 +22,16 @@ import com.lightdemo.util.PropertiesUtil;
 import com.lightdemo.util.RSAUtils;
 import com.lightdemo.util.Utils;
 /**
- * 组织人员同步测试类
+ * 商务伙伴组织人员同步测试类
  * @author cjqbrave@163.com
  *
  */
-public class PersonSyncApiTest {
+public class PnPersonSyncApiTest {
 	private String EID;
 	private String host;
 	private String openId;
 
-	public PersonSyncApiTest() {
+	public PnPersonSyncApiTest() {
 		Common cm = (Common) PropertiesUtil.loadCommonProperties("common.properties", Common.class);
 		this.EID = cm.getEID();
 		this.host = cm.getXT_SERVERNAME();
@@ -39,34 +39,82 @@ public class PersonSyncApiTest {
 	}
 	
 	public static void main(String[] args) {
-		PersonSyncApiTest psa = new PersonSyncApiTest();
+		PnPersonSyncApiTest psa = new PnPersonSyncApiTest();
 		try {
-			psa.addDept();
+//			psa.addDept();
+//			psa.deleteDept();
+//			psa.updateDept();
+//			psa.addPerson();
+//			psa.updatePersonInfo();
+			psa.personUpdateDept();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
+	private void deleteDept() throws Exception {
+
+		String url = host + "/openaccess/input/pndept/delete";
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));
+		nvps.add(new BasicNameValuePair("eid", EID));
+		JSONObject json = new JSONObject();
+		json.put("eid", EID);
+		json.put("departments", new String[]{"山东\\烟台烟台"});
+		nvps.add(new BasicNameValuePair("data", enyte(json.toString())));
+		String reponse = Utils.sendPost(url, nvps);
+		System.out.println(reponse);
+	}
+
 	/**
 	 * 添加部门信息
 	 * @throws Exception 
 	 */
 	public void addDept() throws Exception{
 		//讯通，改成了需要先同步部门
-		String  url = host  + "/openaccess/input/dept/add";
+		String  url = host  + "/openaccess/input/pndept/add";
 		List <NameValuePair> nvps = new ArrayList <NameValuePair>();  
         nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));  
         nvps.add(new BasicNameValuePair("eid", EID));  
-        nvps.add(new BasicNameValuePair("data", enyte(setDepartment())));  
+        JSONObject json = new JSONObject();
+		json.put("eid", EID);
+		json.put("departments", new String[]{"山东\\烟台"});
+        nvps.add(new BasicNameValuePair("data", enyte(json.toString())));  
         String reponse = Utils.sendPost(url,nvps);
      	System.out.println(reponse);
 	}
 	
+	private String setPerson(){
+		PersonData2DTO p = new PersonData2DTO();
+		p.setEid(this.EID);
+		List<Person> persons = new ArrayList<Person>();
+		Person person = new Person();
+		person.setName("阳光灿烂");
+//		person.setEmail("hello@hotmail.com");
+		//person.photoUrl="";
+		person.setPhone("18666930548");
+		//person.phones="";
+//		person.setIsHidePhone("0");
+//		person.setPassword("iworld2013");
+		//person.status = "1";
+		person.gender ="0";
+		person.setDepartment("山东");
+//		person.setLongName("金蝶中国\\决策部2\\ceo");
+		person.setJobTitle("实施经理");
+//		person.setOpenId(this.openId);
+		//person.jobTitle="CEO";
+		persons.add(person);
+		p.setPersons(persons);
+		JSONObject jo = JSONObject.fromObject(p);
+		
+		return jo.toString();
+	}
 	/**
 	 * 添加人员信息
 	 * @throws Exception 
 	 */
 	public void addPerson() throws Exception{
-		String  url = host  + "/openaccess/input/person/add";
+		String  url = host  + "/openaccess/input/pnperson/add";
 		List <NameValuePair> nvps = new ArrayList <NameValuePair>();  
         nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));  
         nvps.add(new BasicNameValuePair("eid", EID));  
@@ -79,7 +127,7 @@ public class PersonSyncApiTest {
 	 * @throws Exception 
 	 */
 	public void getPersonAtTime() throws Exception{
-		String  url = host  + "/openaccess/input/person/getAtTime";
+		String  url = host  + "/openaccess/input/pnperson/getAtTime";
 		List <NameValuePair> data = new ArrayList <NameValuePair>(); 
 		data.add(new BasicNameValuePair("eid",EID));
 		data.add(new BasicNameValuePair("time","2015-05-26 01:40:38"));
@@ -101,7 +149,7 @@ public class PersonSyncApiTest {
 	 * @throws Exception 
 	 */
 	public void getPerson() throws Exception{
-		String  url = host  + "/openaccess/input/person/get";
+		String  url = host  + "/openaccess/input/pnperson/get";
 		List <NameValuePair> nvps = new ArrayList <NameValuePair>();  
         nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));  
         nvps.add(new BasicNameValuePair("eid", EID));  
@@ -114,7 +162,31 @@ public class PersonSyncApiTest {
 	 * @throws Exception 
 	 */
 	public void updateDept() throws Exception{
-		String  url = host  + "/openaccess/input/person/updateDept";
+		String  url = host  + "/openaccess/input/pndept/update";
+		List <NameValuePair> nvps = new ArrayList <NameValuePair>();  
+        nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));  
+        nvps.add(new BasicNameValuePair("eid", EID));  
+        JSONObject obj = new JSONObject();
+        JSONArray ar = new JSONArray();
+        
+        JSONObject oj = new JSONObject();
+//        oj.put("department", "山东\\威海");
+        oj.put("department", "山东\\威海");
+        oj.put("todepartment", "山东\\青岛");
+        ar.add(oj);
+        
+        obj.put("eid", EID);
+        obj.put("departments", ar.toString());
+        nvps.add(new BasicNameValuePair("data", enyte(obj.toString())));  
+        String reponse = Utils.sendPost(url,nvps);
+        System.out.println(reponse);
+	}
+	/**
+	 * 更新人员的组织
+	 * @throws Exception
+	 */
+	public void personUpdateDept() throws Exception{
+		String  url = host  + "/openaccess/input/pnperson/updateDept";
 		List <NameValuePair> nvps = new ArrayList <NameValuePair>();  
         nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));  
         nvps.add(new BasicNameValuePair("eid", EID));  
@@ -122,8 +194,8 @@ public class PersonSyncApiTest {
         obj.put("eid", EID);
         JSONArray ar = new JSONArray();
         JSONObject oj = new JSONObject();
-        oj.put("openId", "");
-        oj.put("department", "金蝶集团3");
+        oj.put("openId", this.openId);
+        oj.put("department", "山东");
         ar.add(oj);
         obj.put("persons", ar.toString());//修改3041， 从采销部变成金蝶集团
         nvps.add(new BasicNameValuePair("data", enyte(obj.toString())));  
@@ -135,7 +207,7 @@ public class PersonSyncApiTest {
 	 * @throws Exception 
 	 */
 	public void getAllPersons() throws Exception{
-		String  url = host  + "/openaccess/input/person/getall";
+		String  url = host  + "/openaccess/input/pnperson/getall";
 		List <NameValuePair> nvps = new ArrayList <NameValuePair>();  
         nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));  
         nvps.add(new BasicNameValuePair("eid", EID));  
@@ -149,7 +221,7 @@ public class PersonSyncApiTest {
 	 */
 	public void updatePersonInfo() throws Exception{
 		
-		String  url = host  + "/openaccess/input/person/updateInfo";
+		String  url = host  + "/openaccess/input/pnperson/updateInfo";
 		List <NameValuePair> nvps = new ArrayList <NameValuePair>();  
         nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));  
         nvps.add(new BasicNameValuePair("eid", EID));  
@@ -159,6 +231,7 @@ public class PersonSyncApiTest {
         JSONObject per = new JSONObject();
         per.put("openId", this.openId);
         per.put("jobTitle", "实施交付经理人");
+        per.put("name", "猪八戒");
         ar.add(per);
         json.put("persons", ar);
         nvps.add(new BasicNameValuePair("data", enyte(json.toString())));  
@@ -216,7 +289,7 @@ public class PersonSyncApiTest {
 	
 	private String enyte(String data){
 		try {
-			String path = PersonSyncApiTest.class.getResource("/").getPath();
+			String path = PnPersonSyncApiTest.class.getResource("/").getPath();
 			byte[] b = FileUtils.readFileToByteArray(new File(path + EID+".key"));
 			PrivateKey restorePublicKey = RSAUtils.restorePrivateKey(b);
 			byte[] bytes =  Base64.encodeBase64(RSAUtils.encryptLarger(data.getBytes(), restorePublicKey));
@@ -237,35 +310,8 @@ public class PersonSyncApiTest {
 	private String setDepartment(){
 		DeptDTO depts = new DeptDTO();
 		depts.setEid(EID);
-		depts.setDepartments(new String[]{"分公司\\北京分公司"});
+		depts.setDepartments(new String[]{});
 		JSONObject jo = JSONObject.fromObject(depts);
-		return jo.toString();
-	}
-	
-	private String setPerson(){
-		PersonData2DTO p = new PersonData2DTO();
-		p.setEid(this.EID);
-		List<Person> persons = new ArrayList<Person>();
-		Person person = new Person();
-//		person.setName("ddddd");
-//		person.setEmail("hello@hotmail.com");
-		//person.photoUrl="";
-//		person.setPhone("000000003041");
-		//person.phones="";
-//		person.setIsHidePhone("0");
-//		person.setPassword("iworld2013");
-		//person.status = "1";
-		person.gender ="0";
-//		person.setDepartment("金蝶中国\\决策部2\\ceo");
-//		person.setLongName("金蝶中国\\决策部2\\ceo");
-		person.setJobTitle("实施经理");
-//		person.setPhones("18905158701");
-		person.setOpenId(this.openId);
-		//person.jobTitle="CEO";
-		persons.add(person);
-		p.setPersons(persons);
-		JSONObject jo = JSONObject.fromObject(p);
-		
 		return jo.toString();
 	}
 	

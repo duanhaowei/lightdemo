@@ -41,7 +41,12 @@ public class DictController {
 			
 			System.out.println(DictController.class.getClassLoader().getResource(""));
 			
-			String str = Utils.sendPost(url, params);
+			String str = null;
+			try {
+				str = Utils.sendPost(url, params);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			if(null != str && str.trim().length() >0) {
 				reJson = JSONObject.fromObject(str.trim());
 				JSONObject smr = reJson.getJSONObject("smartResult");
