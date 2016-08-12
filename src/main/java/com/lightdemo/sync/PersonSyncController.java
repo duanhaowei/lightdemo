@@ -50,7 +50,6 @@ public class PersonSyncController {
 		boolean success = true;
 		String url = XT_SERVERNAME + "/openauth2/api/token?grant_type=client_credential&appid="+APPID+"&secret="+SECRET;
 		try {
-			//��ȡtoken
 			String rs = Utils.sendPost(url, null);
 			if(null != rs && rs.trim().length() > 0){
 				JSONObject tokenJson = JSONObject.fromObject(rs);
