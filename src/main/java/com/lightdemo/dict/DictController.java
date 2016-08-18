@@ -20,7 +20,7 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping(value="dict")
 public class DictController {
-	@Value("${db.username}")
+	@Value("${jdbc.username}")
 	private String dbuserName;
 	
 	@RequestMapping(value="/translate",method=RequestMethod.POST,

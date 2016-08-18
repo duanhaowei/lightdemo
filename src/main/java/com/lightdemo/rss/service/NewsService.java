@@ -11,5 +11,9 @@ public interface NewsService {
 	 * @return
 	 */
 	List<News> getIFendNews(String ifengNewsUrl);
+	
+	void save(News news);
+	
+	News findById(String id);
 
 }

@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
@@ -23,12 +24,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.lightdemo.rss.dao.NewsDao;
 import com.lightdemo.rss.model.News;
 import com.lightdemo.rss.service.NewsService;
 
 @Service
 public class NewsServiceImpl implements NewsService {
 	Logger logger = LoggerFactory.getLogger(NewsServiceImpl.class);
+	private NewsDao newsDao;
+	
+	@Autowired
+	public void setNewsDao(NewsDao newsDao) {
+		this.newsDao = newsDao;
+	}
 
 	static DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	static DocumentBuilder builder = null;
@@ -61,8 +69,7 @@ public class NewsServiceImpl implements NewsService {
 						if (null != nc) {
 							String name = nc.getNodeName();
 							if (null != name && !name.equals("#text") && nc.getFirstChild() != null) {
-								String value = nc.getFirstChild().getNodeValue();
-								
+								String value = nc.getFirstChild().getNodeValue().trim();
 								if (name.equals("title")) {
 									nw.setTitle(value);
 								} else if (name.equals("link")) {
@@ -77,7 +84,7 @@ public class NewsServiceImpl implements NewsService {
 										NodeList decList = nc.getChildNodes();
 										Node dec = decList.item(1);
 										if (dec != null) {
-											String decVal = dec.getNodeValue();
+											String decVal = dec.getNodeValue().trim();
 											nw.setDescription(decVal);
 											value = decVal;
 										}
@@ -112,5 +119,16 @@ public class NewsServiceImpl implements NewsService {
 		NewsServiceImpl im = new NewsServiceImpl();
 		im.getIFendNews(ifengNewsUrl);
 		System.out.println("执行结束");
+	}
+
+	@Override
+	public void save(News news) {
+		newsDao.save(news);
+	}
+
+	@Override
+	public News findById(String id) {
+		// TODO Auto-generated method stub
+		return newsDao.findNews(id);
 	}
 }
