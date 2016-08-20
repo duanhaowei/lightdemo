@@ -19,6 +19,7 @@
 		<script src="/lightdemo/views/js/jquery-2.1.4.min.js"></script>
 		<script type="text/javascript" src="/lightdemo/views/js/new.js" ></script>
 		<script src="http://yun.kingdee.com/res/js/qingjs.js"></script>
+		
 		<input id="appId" type="hidden" value="${appId}">
 		<input id="appName" type="hidden" value="${appName}">
 		<div class="mui-content">
@@ -49,6 +50,7 @@
 					<div class="mui-card-footer">
 						<div>${item.pubDate}</div>
 						<div><button class="share" value="${item.id}">分享</button></div>
+						<div><button class="shareall" value="${item.id}">广播</button></div>
 					</div>
 					<input type="hidden" id="link_${item.id}" value="${item.link}">
 				</div>

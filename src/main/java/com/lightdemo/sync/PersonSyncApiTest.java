@@ -239,6 +239,7 @@ public class PersonSyncApiTest {
 		depts.setEid(EID);
 		depts.setDepartments(new String[]{"分公司\\北京分公司"});
 		JSONObject jo = JSONObject.fromObject(depts);
+		System.out.println(jo.toString());
 		return jo.toString();
 	}
 	

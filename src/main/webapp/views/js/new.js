@@ -24,4 +24,16 @@ $(document).ready(function(){
 		      alert("结果："+JSON.stringify(result));
 		});
 	});
+	
+	
+	$(".shareall").click(function(){
+		var id = this.value;
+		var appId = $('#appId').val();
+		var appName = $('#appName').val();
+		var title = $('#title_'+id).text();
+		var content = $('#desc_'+id).text();
+		var webpageUrl = $('#link_'+id).val();
+		
+	});
+	
 });

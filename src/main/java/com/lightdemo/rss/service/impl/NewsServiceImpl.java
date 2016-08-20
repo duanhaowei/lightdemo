@@ -7,16 +7,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.PrivateKey;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
@@ -27,11 +35,24 @@ import org.w3c.dom.NodeList;
 import com.lightdemo.rss.dao.NewsDao;
 import com.lightdemo.rss.model.News;
 import com.lightdemo.rss.service.NewsService;
+import com.lightdemo.sync.AdminDto;
+import com.lightdemo.sync.PersonSyncApiTest;
+import com.lightdemo.util.RSAUtils;
+import com.lightdemo.util.Utils;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Service
 public class NewsServiceImpl implements NewsService {
 	Logger logger = LoggerFactory.getLogger(NewsServiceImpl.class);
 	private NewsDao newsDao;
+	@Value(value="${APPID}")
+	private String APPID = null;
+	@Value(value="${XT_SERVERNAME}")
+	private String host = null;
+	@Value(value="${EID}")
+	private String EID = null;
 	
 	@Autowired
 	public void setNewsDao(NewsDao newsDao) {
@@ -130,5 +151,81 @@ public class NewsServiceImpl implements NewsService {
 	public News findById(String id) {
 		// TODO Auto-generated method stub
 		return newsDao.findNews(id);
+	}
+
+	@Override
+	public List<News> findByTitle(String title) {
+		return newsDao.findByTitle(title);
+	}
+
+	@Override
+	public boolean isDeptAdmin(String openId) {
+		AdminDto temp = newsDao.getOrgAdminByOpenId(openId);
+		if(null != temp) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public AdminDto getOrgAdminByOpenId(String openId) {
+		return newsDao.getOrgAdminByOpenId(openId);
+	}
+
+	@Override
+	public void saveOrgAdmin(String openId, String dept) {
+		newsDao.saveOrgAdmin(openId, dept);
+	}
+
+	@Override
+	public List<AdminDto> getOrgAllAdmin(int start, int limit) {
+		String str = null;
+		try {
+			str = getOrgAdmin(start, limit);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(null != str) {
+			JSONArray jsonar = JSONArray.fromObject(str);
+			
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * 添加部门信息
+	 * @throws Exception 
+	 */
+	public String getOrgAdmin(int start, int limit) throws Exception{
+		//讯通，改成了需要先同步部门
+		String  url = host  + "/openaccess/input/company/queryOrgAdmins";
+		List <NameValuePair> nvps = new ArrayList <NameValuePair>();  
+        nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));  
+        nvps.add(new BasicNameValuePair("eid", EID));  
+        JSONObject json = new JSONObject();
+        json.put("begin", start);
+        json.put("count", limit);
+        nvps.add(new BasicNameValuePair("data", enyte(json.toString())));  
+        String reponse = Utils.sendPost(url,nvps);
+        return reponse;
+	}
+	
+	
+	private String enyte(String data){
+		try {
+			String path = PersonSyncApiTest.class.getResource("/").getPath();
+			byte[] b = FileUtils.readFileToByteArray(new File(path + EID+".key"));
+			PrivateKey restorePublicKey = RSAUtils.restorePrivateKey(b);
+			byte[] bytes =  Base64.encodeBase64(RSAUtils.encryptLarger(data.getBytes(), restorePublicKey));
+			return new String(bytes,"UTF-8");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
