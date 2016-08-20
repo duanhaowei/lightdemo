@@ -1,28 +1,30 @@
 package com.lightdemo.rss.dao.impl;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.lightdemo.rss.dao.NewsDao;
+import com.lightdemo.rss.mapper.AdminDtoMapper;
+import com.lightdemo.rss.mapper.NewsMapper;
 import com.lightdemo.rss.model.News;
 import com.lightdemo.sync.AdminDto;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 public class NewsDaoImpl extends JdbcDaoSupport implements NewsDao {
-
+	Logger logger = LoggerFactory.getLogger(NewsDaoImpl.class);
+	@SuppressWarnings("unchecked")
 	@Override
 	public News findNews(String id) {
 		String sqlStr = "select * from news where id=?";
-		final News n = new News();
-		this.getJdbcTemplate().queryForObject(sqlStr, new Object[]{id}, News.class);
-		return n;
+		List<News> list = this.getJdbcTemplate().query(sqlStr,	new Object[]{id}, new NewsMapper());
+		if(null != list) {
+			return list.get(0);
+		}
+		return null;
 	}
 
 	@Override
@@ -32,21 +34,12 @@ public class NewsDaoImpl extends JdbcDaoSupport implements NewsDao {
 		this.getJdbcTemplate().update(sqlStr, params);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<News> findByTitle(String title) {
-		String sql = "select * from news where title=?";
-		List<Map<String, Object>> listMap = this.getJdbcTemplate().queryForList(sql,new Object[]{title});
-		List<News> list = new ArrayList<News>(listMap.size());
-		for(Map<String, Object> map : listMap) {
-			News n = new News();
-			try {
-				BeanUtils.populate(n, map);
-				System.out.println(map+"\n");
-			} catch (IllegalAccessException | InvocationTargetException e) {
-				e.printStackTrace();
-			} 
-			list.add(n);
-		}
+	public List<News> findByLink(String link) {
+		String sql = "select * from news where link=?";
+		List<News> list = this.getJdbcTemplate().query(sql,
+				new Object[]{link}, new NewsMapper());
 		return list;
 	}
 
@@ -54,26 +47,31 @@ public class NewsDaoImpl extends JdbcDaoSupport implements NewsDao {
 	@Override
 	public AdminDto getOrgAdminByOpenId(String openId) {
 		String sql = "select * from orgadmin where openId=?";
-		Map<String, Object> map = this.getJdbcTemplate().queryForMap(sql, new Object[]{openId});
-		AdminDto ad = null;
-		try {
-			ad = new AdminDto();
-			BeanUtils.populate(ad, map);
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		@SuppressWarnings("unchecked")
+		List<AdminDto> list = this.getJdbcTemplate().query(sql,
+				new Object[]{openId}, new AdminDtoMapper());
+		if(null != list && list.size() > 0) {
+			return list.get(0);
 		}
-		return ad;
+		return null;
 	}
 
 	@Override
 	public void saveOrgAdmin(String openId, String dept) {
-		String sqlStr = "insert into news values(?,?,?)";
+		String sqlStr = "insert into orgadmin values(?,?,?)";
 		Object[] params = new Object[]{UUID.randomUUID().toString(),openId, dept};
 		this.getJdbcTemplate().update(sqlStr, params);
+	}
+
+	@Override
+	public List<News> findNewsGtDate(Date date) {
+		String sqlStr = "select * from news where pubDate > ?";
+		List<News> list = this.getJdbcTemplate().query(sqlStr,	new Object[]{date}, new NewsMapper());
+		if(null != list) {
+			return list;
+		}
+		return null;
 	}
 
 }

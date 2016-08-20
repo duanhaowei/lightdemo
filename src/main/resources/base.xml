@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:p="http://www.springframework.org/schema/p"
@@ -17,11 +17,11 @@
        http://www.springframework.org/schema/mvc  
        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 	<!-- 加载properties文件 -->
-
 	<bean id="propertiesConfiguer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
+				<value>classpath:common.properties </value>
 				<value>classpath:jdbc.properties </value>
 			</list>
 		</property>
@@ -100,11 +100,8 @@
 			<tx:method name="*" />
 		</tx:attributes>
 	</tx:advice>
-
 	<!-- 配置Jdbc模板 -->
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
-	<import resource="dao.xml" />
- 	<import resource="job.xml" />
 </beans>

@@ -4,10 +4,11 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.stereotype.Component;
 
 import com.lightdemo.rss.model.News;
-
-public class DeptAdminJob {
+@Component("deptAdminJob")
+public class CommonJob1 {
 	private int timeout;
 	private static int i = 0;
 
@@ -16,10 +17,10 @@ public class DeptAdminJob {
 		this.timeout = timeout;
 	}
 
-	private NewsService newsService;
-	public void setNewsService(NewsService newsService) {
-		this.newsService = newsService;
-	}
+//	private NewsService newsService;
+//	public void setNewsService(NewsService newsService) {
+//		this.newsService = newsService;
+//	}
 
 
 	public String doIt() {
@@ -40,10 +41,10 @@ public class DeptAdminJob {
 		// }
 		System.out.println(timeout++);
 		try {
-			News news = newsService.findById("056c484b-5758-4447-8275-552b3881a25b");
-			if(null != news) {
-				System.out.println(news.getDescription());
-			}
+//			News news = newsService.findById("056c484b-5758-4447-8275-552b3881a25b");
+//			if(null != news) {
+//				System.out.println(news.getDescription());
+//			}
 			
 			System.out.println("Hello....");
 		} catch (Exception e) {

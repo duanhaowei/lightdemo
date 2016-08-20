@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
@@ -15,17 +17,15 @@ import com.lightdemo.sync.AdminDto;
  *
  */
 public class CommonJob extends QuartzJobBean {
-	
+	Logger logger = LoggerFactory.getLogger(CommonJob.class);
 	private NewsService newsService;
-	private int timeout;
-
-	/**
-	 * Setter called after the ExampleJob is instantiated with the value from
-	 * the JobDetailFactoryBean (5)
-	 */
-	public void setTimeout(int timeout) {
-		this.timeout = timeout;
+	private String newsqqurl;
+	
+	public void setNewsqqurl(String newsqqurl) {
+		this.newsqqurl = newsqqurl;
 	}
+
+
 	public void setNewsService(NewsService newsService) {
 		this.newsService = newsService;
 	}
@@ -33,33 +33,41 @@ public class CommonJob extends QuartzJobBean {
 
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
-		int start = 0;
-		int limit = 10;
-		// List<AdminDto> list = newsService.getOrgAllAdmin(start, limit);
-		// while(list.size() > 0) {
-		// for(AdminDto tem : list) {
-		// String openId = tem.getOpenId();
-		// AdminDto temp = newsService.getOrgAdminByOpenId(openId);
-		// if(null == temp) {
-		// String dept = tem.getDepartment();
-		// newsService.saveOrgAdmin(openId, dept);
-		// }
-		// }
-		// list = newsService.getOrgAllAdmin(start, limit);
-		// start = start + 10;
-		// }
-		System.out.println(timeout++);
+		logger.info("commonJob start ....");
+		logger.debug("commonJob start ....");
 		try {
-			News news = newsService.findById("056c484b-5758-4447-8275-552b3881a25b");
-			if(null != news) {
-				System.out.println(news.getDescription());
+			/**调度获取管理员**/
+			int start = 0;
+			int limit = 10;
+			List<AdminDto> list = newsService.getOrgAllAdmin(start, limit);
+			logger.info("admin size ....{}", list.size());
+			while (null != list && list.size() > 0) {
+				for (AdminDto tem : list) {
+					String openId = tem.getOpenId();
+					AdminDto temp = newsService.getOrgAdminByOpenId(openId);
+					if (null == temp) {
+						String dept = tem.getDepartment();
+						newsService.saveOrgAdmin(openId, dept);
+					}
+				}
+				start = start + 10;
+				list = newsService.getOrgAllAdmin(start, limit);
 			}
-			
-			System.out.println("Hello....");
+			/**调度获取新闻保存到表中**/
+			List<News> newslist = newsService.getNewsQq(newsqqurl);
+			for(News temp : newslist) {
+				String link = temp.getLink();
+				List<News> ex = newsService.findByLink(link);
+				if(ex.size() == 0) {
+					newsService.save(temp);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.info("commonJob error ....{}",e);
 		}
-		
+		logger.info("commonJob end ....");
+		logger.debug("commonJob end ....");
 	}
 
 }

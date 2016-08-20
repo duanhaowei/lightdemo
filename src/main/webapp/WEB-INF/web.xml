@@ -26,7 +26,8 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
         <param-value>
-			classpath:base.xml
+			classpath:base.xml,
+			classpath:dao.xml
 		</param-value>  
 	</context-param>
 	<listener>

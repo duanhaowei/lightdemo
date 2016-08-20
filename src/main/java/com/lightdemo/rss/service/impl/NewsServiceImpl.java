@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.PrivateKey;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,10 +44,11 @@ import com.lightdemo.util.Utils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-@Service
+@Service(value="newsService")
 public class NewsServiceImpl implements NewsService {
 	Logger logger = LoggerFactory.getLogger(NewsServiceImpl.class);
 	private NewsDao newsDao;
+	
 	@Value(value="${APPID}")
 	private String APPID = null;
 	@Value(value="${XT_SERVERNAME}")
@@ -63,12 +65,12 @@ public class NewsServiceImpl implements NewsService {
 	static DocumentBuilder builder = null;
 
 	@Override
-	public List<News> getIFendNews(String ifengNewsUrl) {
-		if (StringUtils.isEmpty(ifengNewsUrl)) {
+	public List<News> getNewsQq(String newsqq) {
+		if (StringUtils.isEmpty(newsqq)) {
 			logger.error("ifengNewsUrl is null");
 			return null;
 		}
-		List<News> list = readXML(ifengNewsUrl);
+		List<News> list = readXML(newsqq);
 		return list;
 	}
 
@@ -99,11 +101,12 @@ public class NewsServiceImpl implements NewsService {
 								} else if (name.equals("guid")) {
 
 								} else if (name.equals("pubDate")) {
-									nw.setPubDate(value);
+									SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+									nw.setPubDate(sdf.parse(value));
 								} else if (name.equals("description")) {
 									if (nc.hasChildNodes()) {
 										NodeList decList = nc.getChildNodes();
-										Node dec = decList.item(1);
+										Node dec = decList.item(0);
 										if (dec != null) {
 											String decVal = dec.getNodeValue().trim();
 											nw.setDescription(decVal);
@@ -111,8 +114,6 @@ public class NewsServiceImpl implements NewsService {
 										}
 									}
 								}
-								System.out.print(name + ":" + value + "\t");
-
 							}
 
 						}
@@ -138,7 +139,6 @@ public class NewsServiceImpl implements NewsService {
 		String ifengNewsUrl = "http://news.ifeng.com/rss/world.xml";
 		System.out.println("执行开始");
 		NewsServiceImpl im = new NewsServiceImpl();
-		im.getIFendNews(ifengNewsUrl);
 		System.out.println("执行结束");
 	}
 
@@ -154,8 +154,8 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public List<News> findByTitle(String title) {
-		return newsDao.findByTitle(title);
+	public List<News> findByLink(String link) {
+		return newsDao.findByLink(link);
 	}
 
 	@Override
@@ -184,10 +184,27 @@ public class NewsServiceImpl implements NewsService {
 			str = getOrgAdmin(start, limit);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("getOrgAllAdmin found error ... {}", e);
 		}
+		logger.info(str);
 		if(null != str) {
-			JSONArray jsonar = JSONArray.fromObject(str);
-			
+			JSONArray jsonar =  null;
+			JSONObject rejson = JSONObject.fromObject(str);
+			if(null == rejson || !rejson.containsKey("success")) {
+				return null;
+			} else {
+				jsonar = JSONArray.fromObject(rejson.get("data"));
+				List<AdminDto> list = new ArrayList<AdminDto>(jsonar.size());
+				for(int i = 0; i < jsonar.size(); i ++) {
+					jsonar.get(i);
+					JSONObject obj = jsonar.getJSONObject(i);
+					AdminDto dto = new AdminDto();
+					dto.setDepartment(obj.getString("department"));
+					dto.setOpenId(obj.getString("openId"));
+					list.add(dto);
+				}
+				return list;
+			}
 		}
 		return null;
 	}
@@ -227,5 +244,10 @@ public class NewsServiceImpl implements NewsService {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public List<News> findNewsGtDate(Date date) {
+		return newsDao.findNewsGtDate(date);
 	}
 }

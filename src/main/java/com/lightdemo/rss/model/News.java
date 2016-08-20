@@ -1,16 +1,18 @@
 package com.lightdemo.rss.model;
 
+import java.util.Date;
+
 public class News {
 	private String id;
 	private String title;
 	private String link;
-	private String pubDate;
+	private Date pubDate;
 	private String description;
 	public News() {
 		super();
 	}
 	
-	public News(String id, String title, String link, String pubDate, String description) {
+	public News(String id, String title, String link, Date pubDate, String description) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -39,12 +41,15 @@ public class News {
 	public void setLink(String link) {
 		this.link = link;
 	}
-	public String getPubDate() {
+	
+	public Date getPubDate() {
 		return pubDate;
 	}
-	public void setPubDate(String pubDate) {
+
+	public void setPubDate(Date pubDate) {
 		this.pubDate = pubDate;
 	}
+
 	public String getDescription() {
 		return description;
 	}

@@ -2,12 +2,15 @@ package com.lightdemo.rss.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.lightdemo.rss.model.News;
 import com.lightdemo.rss.service.NewsService;
 import com.lightdemo.util.FileUtil;
@@ -27,8 +31,9 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping(value = "news")
 public class NewsController {
-	@Value("${IFENGNEWSURL}")
-	private String ifengNewsUrl;
+	Logger logger = LoggerFactory.getLogger(NewsController.class);
+	@Value("${NEWSQQURL}")
+	private String NEWSQQURL;
 	@Value("${APPID}")
 	private String APPID;
 	@Value("${APPNAME}")
@@ -61,25 +66,21 @@ public class NewsController {
 	public ModelAndView shownew(HttpServletRequest req, HttpServletResponse rep) {
 		String ticket = req.getParameter("ticket");
 		
-//		JSONObject perJson = getPersonName(ticket);
-		String openId = null;//(String) perJson.get("openId");
-//		boolean adm = newsService.isDeptAdmin(openId);
+		JSONObject perJson = getPersonName(ticket);
+		String openId = (String) perJson.get("openid");
+		boolean adm = newsService.isDeptAdmin(openId);
 		
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE,   -1);
 		
-		List<News> list = newsService.getIFendNews(ifengNewsUrl);
-//		for(News temp : list) {
-//			String title = temp.getTitle();
-//			List<News> ex = newsService.findByTitle(title);
-//			if(null != ex) {
-//				newsService.save(temp);
-//			}
-//		}
+		List<News> list = newsService.findNewsGtDate(cal.getTime());
+		
 		ModelAndView mav = new ModelAndView("news");
-//		if(adm) {
-//			mav.addObject("admin", true);
-//		} else  {
-//			mav.addObject("admin", false);
-//		}
+		if(adm) {
+			mav.addObject("admin", true);
+		} else  {
+			mav.addObject("admin", false);
+		}
 		mav.addObject("list", list);
 		mav.addObject("appId", APPID);
 		mav.addObject("appName", appName);
@@ -104,7 +105,7 @@ public class NewsController {
 			@RequestParam(defaultValue="10") String length
 			) {
 		JSONObject reJson = new JSONObject();
-		List<News> list = newsService.getIFendNews(ifengNewsUrl);
+		List<News> list = newsService.getNewsQq(NEWSQQURL);
 		
 		reJson.put("recordsFiltered", list.size());
 		reJson.put("recordsFiltered", list.size());
@@ -113,14 +114,17 @@ public class NewsController {
 	}
 	
 	
-	@RequestMapping(value = "/shareAll", method = RequestMethod.POST)
+	@RequestMapping(value = "/shareall", method = RequestMethod.POST)
 	public @ResponseBody String shareAll(HttpServletResponse rep,
-			@RequestParam(defaultValue="0") String start,
-			@RequestParam(defaultValue="10") String length
+			String desc,
+			String title,
+			String link
 			) {
 		JSONObject reJson = new JSONObject();
 		
+		postmsg(title, desc, link,null, 6);
 		
+		reJson.put("success", true);
 		return reJson.toString();
 	}
 	
@@ -156,13 +160,12 @@ public class NewsController {
 	 * @param type 类型
 	 * @return
 	 */
-	public String postmsg(String text, String users, int type) {
+	public String postmsg(String title, String text,String link, String users, int type) {
 
 		JSONObject reJson = new JSONObject();
 		List<String> toUserList = null;
-		if(null == users) {
-			type = 2;
-		} else {
+		if(null != users) {
+//			type = 2;
 			if(users.contains(",")) {
 				String[] arr = users.split(",");
 				toUserList = new ArrayList<String>(arr.length);
@@ -173,7 +176,7 @@ public class NewsController {
 				toUserList = new ArrayList<String>(1);
 				toUserList.add(users);
 			}
-		}
+		} 
 		try {
 			String random = String.valueOf(Math.random() * 100);
 			String nowDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -192,7 +195,7 @@ public class NewsController {
 			JSONArray tos = new JSONArray();
 			JSONObject to = new JSONObject();
 			to.put("no", EID);
-			if(type == 5 && null == users) {
+			if((type == 5 || type == 6) && null == users) {
 				to.put("code", "all");
 			} else {
 				to.put("user", toUserList);
@@ -211,10 +214,13 @@ public class NewsController {
 				JSONArray list = new JSONArray();
 				JSONObject msgJson = new JSONObject();
 				msgJson.put("date", nowDate);
-				msgJson.put("title", "标题");
-				msgJson.put("text", "测试图文消息");
-				msgJson.put("name", imgName);
-				msgJson.put("pic", FileUtil.encodeBase64File(imgFilePath));
+				msgJson.put("title", title);
+				msgJson.put("text", text);
+//				msgJson.put("name", imgName);
+//				msgJson.put("pic", FileUtil.encodeBase64File(imgFilePath));
+				msgJson.put("url", link);
+				msgJson.put("appid", APPID);
+				
 				list.add(msgJson);
 				msg.put("model", 2);
 				msg.put("list", list);

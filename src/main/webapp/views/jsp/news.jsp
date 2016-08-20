@@ -25,7 +25,7 @@
 		<div class="mui-content">
 			<ul class="mui-table-view mui-table-view-chevron">
 				<li class="mui-table-view-cell">
-					国际最新资讯
+					国内最新资讯
 				</li>
 			</ul>
 		</div>
@@ -45,7 +45,7 @@
 					<!--页眉，放置标题-->
 					<div id="title_${item.id}" class="mui-card-header">${item.title}</div>
 					<!--内容区-->
-					<div id="desc_${item.id}" class="mui-card-content-inner">${item.description}</div>
+					<div id="desc_${item.id}" class="mui-card-content-inner">${item.description}<a href="${item.link}">【点击查看全文】</a></div>
 					<!--页脚，放置补充信息或支持的操作-->
 					<div class="mui-card-footer">
 						<div>${item.pubDate}</div>
