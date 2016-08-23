@@ -43,7 +43,6 @@
   			
   			<button type="button" class="btn btn-default" id="hideWebViewTitle">隐藏页面标题</button>
   			<button type="button" class="btn btn-default" id="setWebViewTitle">设置页面标题并显示</button>
- 			<button type="button" class="btn btn-default" id="getPersonInfo">获取当期用户信息</button>
   			<button type="button" class="btn btn-default" id="getNetworkType">获取用户网络状态</button>
   			<button type="button" class="btn btn-default" id="gotoApp">打开第三方应用</button>
   			<button type="button" class="btn btn-default" id="sinin">调用云之家签到</button>
@@ -54,13 +53,15 @@
   			<button type="button" class="btn btn-default" id="selectPic">选择图片</button>
   			<button type="button" class="btn btn-default" id="shareImage">分享图片</button>
   			
-  			
   			<button type="button" class="btn btn-default" id="scanQRCode">扫一扫</button>
   			<button type="button" class="btn btn-default" id="selectOrg">选择组织</button>
   			
   			<button type="button" class="btn btn-default" id="selectDepts">选择部门</button>
   			<button type="button" class="btn btn-default" id="selectPersons">选择多人</button>
   			<button type="button" class="btn btn-default" id="selectPerson">选择单人</button>
+  			
+  			<button type="button" class="btn btn-default" id="useragent">验证UserAgent</button>
+  			
 		</div>
       </div>
 

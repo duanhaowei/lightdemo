@@ -202,5 +202,20 @@ $(document).ready(function(){
 		
 		});
 	});
+	$("#useragent").click(function(){
+		var flg = checkUserAgent();
+		alert(flg);
+	});
+	
+	function checkUserAgent(){
+		var userAgent = window.navigator.userAgent;
+		alert(userAgent);
+		if(userAgent.indexOf("clientId:10201")>-1) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
 	
 })
