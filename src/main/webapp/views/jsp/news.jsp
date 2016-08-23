@@ -50,7 +50,10 @@
 					<div class="mui-card-footer">
 						<div>${item.pubDate}</div>
 						<div><button class="share" value="${item.id}">分享</button></div>
-						<div><button class="shareall" value="${item.id}">广播</button></div>
+						<c:if test="${admin == true}">
+						   <div><button class="shareall" value="${item.id}">广播</button></div>
+						</c:if>
+						
 					</div>
 					<input type="hidden" id="link_${item.id}" value="${item.link}">
 				</div>
