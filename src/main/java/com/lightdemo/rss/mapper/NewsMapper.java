@@ -2,6 +2,7 @@ package com.lightdemo.rss.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -20,7 +21,8 @@ public class NewsMapper implements RowMapper{
 			ns.setDescription(rs.getString("description"));
 			ns.setId(rs.getString("id"));
 			ns.setLink(rs.getString("link"));
-			ns.setPubDate(rs.getDate("pubDate"));
+			if(null != rs.getDate("pubDate"))
+				ns.setPubDate(new Date(rs.getDate("pubDate").getTime()));
 			ns.setTitle(rs.getString("title"));
 			return ns;
 		}

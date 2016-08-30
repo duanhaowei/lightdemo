@@ -102,8 +102,8 @@
 	<bean id="cronTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="orgAdminJob" />
-		<!-- <property name="cronExpression" value="0/5 * * * * ?"></property> -->
-		<property name="cronExpression" value="0 0 6 * * ?" />
+		<property name="cronExpression" value="0/5 * * * * ?"></property>
+		<!-- <property name="cronExpression" value="0 0 6 * * ?" /> -->
 	</bean>
 	<!-- 启动触发器的配置开始 -->
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
