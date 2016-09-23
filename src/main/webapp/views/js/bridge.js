@@ -94,6 +94,17 @@ $(document).ready(function(){
 		});
 		
 	});
+	$("#showOFile").click(function(){
+		
+		XuntongJSBridge.call('showFile',{'fileId':'',
+			'fileName':'showme.txt','fileExt':'txt',
+			'fileTime':'2015-06-02 15:40','fileSize':'1200', 
+			'fileDownloadUrl':'http://172.20.200.66:8888/lightdemo/data/showme.txt'},function(result){
+		});
+		
+		
+	});
+	
 	$("#selectPic").click(function(){
 		XuntongJSBridge.call('selectPic',{},function(result){});
 	});

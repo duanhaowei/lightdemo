@@ -49,7 +49,8 @@
   			<button type="button" class="btn btn-default" id="createChat">创建会话</button>
   			<button type="button" class="btn btn-default" id="invite">邀请</button>
   			<button type="button" class="btn btn-default" id="selectFile">选择文件</button>
-  			<button type="button" class="btn btn-default" id="showFile">显示文件</button>
+  			<button type="button" class="btn btn-default" id="showFile">显示云之家文件</button>
+  			<button type="button" class="btn btn-default" id="showOFile">显示外部文件</button>
   			<button type="button" class="btn btn-default" id="selectPic">选择图片</button>
   			<button type="button" class="btn btn-default" id="shareImage">分享图片</button>
   			
