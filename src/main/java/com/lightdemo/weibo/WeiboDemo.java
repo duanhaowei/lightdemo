@@ -28,7 +28,7 @@ public class WeiboDemo {
 	private String consumerSecret;
 	private String email;
 	private String password;
-	
+	private String networkId;
 	
 	public WeiboDemo(){
 		Common cm = (Common) PropertiesUtil.loadCommonProperties("common.properties", Common.class);
@@ -37,17 +37,18 @@ public class WeiboDemo {
 		this.consumerSecret = cm.getCONSUMERSECRET();
 		this.email = cm.getEMAIL();
 		this.password = cm.getPASSWORD();
+		this.networkId = "101";
 	}
 	
 	public static void main(String[] args) {
 		WeiboDemo wb = new WeiboDemo();
 		try {
-//			wb.uploadProfileImage("13417396677","04302","C:/Users/kingdee/Pictures/2.png");
-//			wb.uploadProfileImage("18028752937","04302","C:/Users/kingdee/Pictures/小兔子.png");
-//			String img1 = "http://images.missyuan.com/attachments/day_081031/20081031_273ca1dfc0a97651ef26GQvSlLOvnTPN.png";
-//			wb.uploadProfileImageByHUrl("18028752937","04302",img1);
+//			wb.uploadProfileImage("13417396677",wb.networkId,"C:/Users/kingdee/Pictures/111.png");
+//			wb.uploadProfileImage("18028752937",wb.networkId,"C:/Users/kingdee/Pictures/u.png");
+			String img1 = "http://images.missyuan.com/attachments/day_081031/20081031_273ca1dfc0a97651ef26GQvSlLOvnTPN.png";
+			wb.uploadProfileImageByHUrl("18028752937",wb.networkId,img1);
 //			wb.fetchWeibo();
-			wb.sendWeibo();
+//			wb.sendWeibo();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

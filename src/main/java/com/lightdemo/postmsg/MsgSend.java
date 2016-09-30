@@ -65,7 +65,7 @@ public class MsgSend {
 	@RequestMapping(value="/postmsg",method=RequestMethod.POST,
 	produces="application/json;charset=UTF-8")
 	public @ResponseBody String postmsg(String text, String users) {
-		return postmsg(text, users, 2);
+		return postmsg(text, users, 5);
 	}
 	/**
 	 * 发送消息
@@ -115,7 +115,8 @@ public class MsgSend {
 			if(type == 5) {
 				msg.put("url", "http://www.baidu.com");
 				msg.put("appid", APPID);
-				msg.put("todo", 0);
+				msg.put("todo", 1);
+				msg.put("todoPriStatus", "undo");
 				msg.put("text", text);
 			} else if(type == 6) {
 				JSONArray list = new JSONArray();
@@ -166,7 +167,7 @@ public class MsgSend {
 		param.put("pubtoken",Utils.sha(str));
 		param.put("nonce",nonce);
 		param.put("time",time);
-		Utils.sendPostO(XT_SERVERNAME, param.toString());
+		Utils.sendPostO(XT_SERVERNAME+"/pubacc/changeTodoMsgStatus", param.toString());
 	}
 	
 	public static void main(String[] args) {
@@ -177,7 +178,8 @@ public class MsgSend {
 		ms.PUBACC = cm.getPUBACC();
 		ms.PUBACC_KEY = cm.getPUBACC_KEY();
 		ms.APPID = cm.getAPPID();
-		ms.postmsg(System.currentTimeMillis()+"",cm.getOPENIDS(), 6);
+//		ms.postmsg(System.currentTimeMillis()+"",cm.getOPENIDS(), 5);
+		ms.changeMsgTodoStatus(cm.getOPENIDS(), cm.getMSGID());
 	}
 	
 }
