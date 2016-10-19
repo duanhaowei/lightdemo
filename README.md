@@ -11,14 +11,14 @@
 `Common cm = PropertiesUtil.loadCommonProperties("common.properties");`
 
 ### 1.组织人员同步相关接口 ###
-操作类是 `com.lightdemo.sync.PersonSyncApiTest`
+操作类是 `com.lightdemo.sync.PersonSyncApiTest.java`
 ### 2.发送公共号消息，修改消息待办状态 ###
-操作类是`com.lightdemo.postmsg.MsgSend`
+操作类是`com.lightdemo.postmsg.MsgSend.java`
 ### 3.微博相关接口oAuth验证调用
 - 微博这边的接口使用的是OAuth1.0 协议。 请参考下面地址说明进行添加key和secret等，才能进行相关接口调用 http://erpcloud.kingdee.com/developer/?p=8
-- 本例中也同样遵循该协议，请详细研读代码。如果发现有什么问题请联系作者。调用方式主要写在WeiboHttp.java中
+- 本例中也同样遵循该协议，请详细研读代码。如果发现有什么问题请联系作者。调用方式主要写在`com.lightdemo.weibo.WeiboHttp.java`中
 ### 4.推送公共号消息、代办消息、改代办状态接口
-- MsgSend.java类有具体demo
+- `com.lightdemo.postmsg.MsgSend.java`类有具体demo
 
 ###基本样例地址
 - 字典轻应用  :
