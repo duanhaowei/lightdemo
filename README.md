@@ -16,6 +16,7 @@
 操作类是 `com.lightdemo.sync.PersonSyncApiTest.java`文档地址：http://erpcloud.kingdee.com/developer/?p=73
 ### 2.推送公共号消息、代办消息、改代办状态接口
 - `com.lightdemo.postmsg.MsgSend.java`类有具体demo.具体文档http://erpcloud.kingdee.com/developer/?p=51
+
 ### 3.微博相关接口oAuth验证调用
 - 微博这边的接口使用的是OAuth1.0 协议。 请参考下面地址说明进行添加key和secret等，才能进行相关接口调用 http://erpcloud.kingdee.com/developer/?p=8
 - 本例中也同样遵循该协议，请详细研读代码。如果发现有什么问题请联系作者。调用方式主要写在`com.lightdemo.weibo.WeiboHttp.java`中
