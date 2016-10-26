@@ -15,10 +15,7 @@ import com.lightdemo.rss.model.News;
 
 public class Test {
 	public static void main(String[] args) {
-		String ifengNewsUrl = "http://news.ifeng.com/rss/world.xml";
-		Test im = new Test();
-		im.getIFendNews(ifengNewsUrl);
-
+		
 	}
 	
 	

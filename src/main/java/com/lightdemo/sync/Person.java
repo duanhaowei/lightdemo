@@ -31,6 +31,8 @@ public class Person {
 	public String longName;
 	
 	public String openId;
+	
+	public int weights = 0;
 
 	public String getOpenId() {
 		return openId;
@@ -135,4 +137,13 @@ public class Person {
 	public void setJobTitle(String jobTitle) {
 		this.jobTitle = jobTitle;
 	}
+
+	public int getWeights() {
+		return weights;
+	}
+
+	public void setWeights(int weights) {
+		this.weights = weights;
+	}
+	
 }

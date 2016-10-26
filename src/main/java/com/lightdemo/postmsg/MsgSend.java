@@ -48,7 +48,7 @@ public class MsgSend {
 	public static int DEFAULT_BUFFER_SIZE = 1024;
 	
 	String imgName = "小兔子.png";
-	String imgFilePath= "C:/Users/chen/Pictures/小兔子.png";
+	String imgFilePath= "C:/111.png";
 	
 	@RequestMapping(value = { "msgmain" })
 	public String msgmain(){
@@ -65,7 +65,7 @@ public class MsgSend {
 	@RequestMapping(value="/postmsg",method=RequestMethod.POST,
 	produces="application/json;charset=UTF-8")
 	public @ResponseBody String postmsg(String text, String users) {
-		return postmsg(text, users, 5);
+		return postmsg(text, users, 5, System.currentTimeMillis()+"");
 	}
 	/**
 	 * 发送消息
@@ -74,7 +74,7 @@ public class MsgSend {
 	 * @param type 类型
 	 * @return
 	 */
-	public String postmsg(String text, String users, int type) {
+	public String postmsg(String text, String users, int type, String sourceId) {
 
 		JSONObject reJson = new JSONObject();
 		List<String> toUserList = null;
@@ -108,7 +108,7 @@ public class MsgSend {
 			JSONObject to = new JSONObject();
 			to.put("no", EID);
 			to.put("user", toUserList);
-			
+			to.put("code", 2);
 			tos.add(to);
 
 			JSONObject msg = new JSONObject();
@@ -117,6 +117,7 @@ public class MsgSend {
 				msg.put("appid", APPID);
 				msg.put("todo", 1);
 				msg.put("todoPriStatus", "undo");
+				msg.put("sourceid", sourceId);
 				msg.put("text", text);
 			} else if(type == 6) {
 				JSONArray list = new JSONArray();
@@ -128,6 +129,10 @@ public class MsgSend {
 				msgJson.put("pic", FileUtil.encodeBase64File(imgFilePath));
 				list.add(msgJson);
 				msg.put("model", 2);
+				msg.put("todo", 1);
+				msg.put("todoPriStatus", "undo");
+//				msg.put("sourceid", sourceId);
+				msg.put("appid", APPID);
 				msg.put("list", list);
 			} else {
 				msg.put("text", text);
@@ -155,7 +160,8 @@ public class MsgSend {
 	 */
 	public void changeMsgTodoStatus(String openId, String msgId){
 		JSONObject param = new JSONObject();
-		param.put("openId", openId);
+//		param.put("openId", openId);
+		param.put("account", openId);
 		param.put("todoMsgIds", msgId);
 		param.put("todoStatus","done");
 		param.put("no",EID);
@@ -178,8 +184,8 @@ public class MsgSend {
 		ms.PUBACC = cm.getPUBACC();
 		ms.PUBACC_KEY = cm.getPUBACC_KEY();
 		ms.APPID = cm.getAPPID();
-//		ms.postmsg(System.currentTimeMillis()+"",cm.getOPENIDS(), 5);
-		ms.changeMsgTodoStatus(cm.getOPENIDS(), cm.getMSGID());
+		ms.postmsg(System.currentTimeMillis()+"",cm.getOPENIDS(), 5, cm.getMSGID());
+//		ms.changeMsgTodoStatus(cm.getOPENIDS(), cm.getMSGID());
 	}
 	
 }

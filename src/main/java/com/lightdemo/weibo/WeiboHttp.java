@@ -57,7 +57,7 @@ public class WeiboHttp {
 
 	   {//POST请求
 	       Set<PostParameter> parameters = new HashSet<PostParameter>();
-	       parameters.add(new PostParameter("email", "xxx@kingdee.com"));
+	       parameters.add(new PostParameter("email", "xxx@chen.com"));
 	       parameters.add(new PostParameter("name", "张三"));
 	       res = http.post(apiURL + "/101/task/removeTask/5551ad2f84ae57efb68172eb.json",      (PostParameter[])parameters.toArray(new PostParameter[0]), true);
 	       System.out.println(res.toString());
