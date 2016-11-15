@@ -46,17 +46,20 @@ public class PnPersonSyncApiTest {
 			// psa.addDept();
 			// psa.deleteDept();
 			// psa.updateDept();
+
+			// psa.getAllPersons();
+			// psa.getPersons();
+			// psa.getPersonsAtTime();
 			// psa.addPerson();
 			// psa.updatePersonInfo();
 			// psa.personUpdateDept();
-//			 psa.getAllPersons();
-//			 psa.getPersons();
-			psa.getPersonsAtTime();
-//			 psa.getallcasvir();
+
+			// psa.getallcasvir();
 			// psa.getcasvir();
-//			 psa.addcasvir();
+			// psa.addcasvir();
 			// psa.updatecasvir();
-//			psa.deletecasvir();
+			// psa.deletecasvir();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -127,32 +130,6 @@ public class PnPersonSyncApiTest {
 		System.out.println(reponse);
 	}
 
-	private String setPerson() {
-		PersonData2DTO p = new PersonData2DTO();
-		p.setEid(this.EID);
-		List<Person> persons = new ArrayList<Person>();
-		Person person = new Person();
-		person.setName("阳光灿烂");
-		// person.setEmail("hello@hotmail.com");
-		// person.photoUrl="";
-		person.setPhone("18666930548");
-		// person.phones="";
-		// person.setIsHidePhone("0");
-		// person.setPassword("iworld2013");
-		// person.status = "1";
-		person.gender = "0";
-		person.setDepartment("山东");
-		// person.setLongName("金蝶中国\\决策部2\\ceo");
-		person.setJobTitle("实施经理");
-		// person.setOpenId(this.openId);
-		// person.jobTitle="CEO";
-		persons.add(person);
-		p.setPersons(persons);
-		JSONObject jo = JSONObject.fromObject(p);
-
-		return jo.toString();
-	}
-
 	/**
 	 * 添加人员信息
 	 * 
@@ -163,9 +140,31 @@ public class PnPersonSyncApiTest {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));
 		nvps.add(new BasicNameValuePair("eid", EID));
-		nvps.add(new BasicNameValuePair("data", enyte(setPerson())));
+		nvps.add(new BasicNameValuePair("data", enyte(addPersonJson())));
 		String reponse = Utils.sendPost(url, nvps);
 		System.out.println(reponse);
+	}
+	
+	private String addPersonJson() {
+		PersonData2DTO p = new PersonData2DTO();
+		p.setEid(this.EID);
+		List<Person> persons = new ArrayList<Person>();
+		Person person = new Person();
+		person.setName("Hello");
+		person.setPhone("18028752935");
+		person.setEmail("hello@hotmail.com");
+		person.setIsHidePhone("0");
+//		person.setStatus("1");
+		person.setGender("0");
+		person.setDepartment("港澳台");
+		person.setJobTitle("实施经理");
+		person.setWeights(33);
+		person.setJobTitle("CEO");
+		person.setOrgUserType(1);
+		persons.add(person);
+		p.setPersons(persons);
+		JSONObject jo = JSONObject.fromObject(p);
+		return jo.toString();
 	}
 
 	/**
@@ -328,7 +327,6 @@ public class PnPersonSyncApiTest {
 		person.setDepartment("中国\\决策部2\\ceo");
 		person.setLongName("中国\\决策部2\\ceo");
 		person.setJobTitle("总经理");
-		person.setPhones("18905158701");
 		// person.setOpenId("595cd2ae-6b0e-11e4-9ba3-000c29e6569e");
 		// person.jobTitle="CEO";
 		persons.add(person);
@@ -454,26 +452,26 @@ public class PnPersonSyncApiTest {
 	private String updatecasvirparam() {
 		JSONObject jo = new JSONObject();
 		jo.put("eid", this.EID);
-		// jo.put("type", 1);
-		jo.put("type", 0);
+		 jo.put("type", 1);
+//		jo.put("type", 0);
 		JSONArray ar = new JSONArray();
 		JSONObject t1 = new JSONObject();
 		t1.put("department", "港澳台");
-		t1.put("todepartment", "港澳台");
-		t1.put("user", "81b9f322-39a0-11e6-8825-005056ac6b20"); // openId
-		// t1.put("user", "18566684664"); // phone
+		t1.put("todepartment", "");
+//		t1.put("user", "81b9f322-39a0-11e6-8825-005056ac6b20"); // openId
+		 t1.put("user", "13546852316"); // phone
 		t1.put("jobTitle", "测试");
-		t1.put("tojobTitle", "开发");
-
-		JSONObject t2 = new JSONObject();
-		t2.put("department", "港澳台");
-		t2.put("todepartment", "港澳台");
-		// t2.put("user", "18028752937"); // phone
-		t2.put("user", "81b88ebc-39a0-11e6-8825-005056ac6b20"); // openId
-		t2.put("jobTitle", "管理");
-		t2.put("tojobTitle", "开发");
+		t1.put("tojobTitle", "测试");
 		ar.add(t1);
-		ar.add(t2);
+		
+//		JSONObject t2 = new JSONObject();
+//		t2.put("department", "港澳台");
+//		t2.put("todepartment", "港澳台");
+//		// t2.put("user", "18028752937"); // phone
+//		t2.put("user", "81b88ebc-39a0-11e6-8825-005056ac6b20"); // openId
+//		t2.put("jobTitle", "管理");
+//		t2.put("tojobTitle", "开发");
+//		ar.add(t2);
 		jo.put("list", ar);
 		return jo.toString();
 	}

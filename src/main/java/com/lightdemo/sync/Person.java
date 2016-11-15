@@ -6,33 +6,31 @@ package com.lightdemo.sync;
  */
 public class Person {
 	
-	public  String name;
+	private  String name;
 	
-	public  String photoUrl;
+	private  String phone;
 	
-	public  String phone;
+	private  String email;
 	
-	public  String phones;
+	private  String isHidePhone;
 	
-	public  String email;
+	private  String status;
 	
-	public  String isHidePhone;
+	private  String gender;
 	
-	public  String status;
+	private  String department;
 	
-	public  String gender;
+	private  String jobTitle;
 	
-	public  String department;
+	private String password;
 	
-	public  String jobTitle;
+	private String longName;
 	
-	public String password;
+	private String openId;
 	
-	public String longName;
+	private int weights = 0;
 	
-	public String openId;
-	
-	public int weights = 0;
+	private int orgUserType = 0;
 
 	public String getOpenId() {
 		return openId;
@@ -66,28 +64,12 @@ public class Person {
 		this.name = name;
 	}
 
-	public String getPhotoUrl() {
-		return photoUrl;
-	}
-
-	public void setPhotoUrl(String photoUrl) {
-		this.photoUrl = photoUrl;
-	}
-
 	public String getPhone() {
 		return phone;
 	}
 
 	public void setPhone(String phone) {
 		this.phone = phone;
-	}
-
-	public String getPhones() {
-		return phones;
-	}
-
-	public void setPhones(String phones) {
-		this.phones = phones;
 	}
 
 	public String getEmail() {
@@ -144,6 +126,14 @@ public class Person {
 
 	public void setWeights(int weights) {
 		this.weights = weights;
+	}
+
+	public int getOrgUserType() {
+		return orgUserType;
+	}
+
+	public void setOrgUserType(int orgUserType) {
+		this.orgUserType = orgUserType;
 	}
 	
 }

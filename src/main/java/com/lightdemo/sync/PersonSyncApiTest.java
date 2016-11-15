@@ -43,16 +43,19 @@ public class PersonSyncApiTest {
 	public static void main(String[] args) {
 		PersonSyncApiTest psa = new PersonSyncApiTest();
 		try {
-//			psa.getAllPersons();
-			// psa.addDept();
+//			 psa.getAllPersons();
+//			 psa.addPerson();
+			 psa.updatePersonInfo();
+
+//			 psa.addDept();
+
 //			 psa.getallcasvir();
-			// psa.getcasvir();
+//			 psa.getcasvir();
 //			 psa.addcasvir();
 //			 psa.updatecasvir();
-//			psa.deletecasvir();
-			psa.addPerson();
-//			psa.updatePersonInfo();
+//			 psa.deletecasvir();
 			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,9 +87,31 @@ public class PersonSyncApiTest {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));
 		nvps.add(new BasicNameValuePair("eid", EID));
-		nvps.add(new BasicNameValuePair("data", enyte(setPerson())));
+		nvps.add(new BasicNameValuePair("data", enyte(addPersonJson())));
 		String reponse = Utils.sendPost(url, nvps);
 		System.out.println(reponse);
+	}
+
+	private String addPersonJson() {
+		PersonData2DTO p = new PersonData2DTO();
+		p.setEid(this.EID);
+		List<Person> persons = new ArrayList<Person>();
+		Person person = new Person();
+		person.setName("Hello");
+		person.setPhone("18028752933");
+		person.setEmail("hello@hotmail.com");
+		person.setIsHidePhone("0");
+//		person.setStatus("1");
+		person.setGender("0");
+		person.setDepartment("北京");
+		person.setJobTitle("实施经理");
+		person.setWeights(33);
+		person.setJobTitle("CEO");
+		person.setOrgUserType(1);
+		persons.add(person);
+		p.setPersons(persons);
+		JSONObject jo = JSONObject.fromObject(p);
+		return jo.toString();
 	}
 
 	/**
@@ -158,7 +183,9 @@ public class PersonSyncApiTest {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));
 		nvps.add(new BasicNameValuePair("eid", EID));
-		nvps.add(new BasicNameValuePair("data", enyte(personGetAllParam())));
+		String temp = personGetAllParam();
+		System.out.println(temp);
+		nvps.add(new BasicNameValuePair("data", enyte(temp)));
 		String reponse = Utils.sendPost(url, nvps);
 		System.out.println(reponse);
 	}
@@ -176,13 +203,17 @@ public class PersonSyncApiTest {
 		nvps.add(new BasicNameValuePair("eid", EID));
 		JSONObject json = new JSONObject();
 		json.put("eid", EID);
+		
 		JSONArray ar = new JSONArray();
 		JSONObject per = new JSONObject();
 		per.put("openId", "eb119070-999a-11e6-8825-005056ac6b20");
+		per.put("name", "泰山");
 		per.put("jobTitle", "实施交付经理人");
 		per.put("weights", 15);
+		per.put("orgUserType", 0);
 		ar.add(per);
 		json.put("persons", ar);
+		
 		nvps.add(new BasicNameValuePair("data", enyte(json.toString())));
 		String reponse = Utils.sendPost(url, nvps);
 		System.out.println(reponse);
@@ -191,8 +222,8 @@ public class PersonSyncApiTest {
 	private String personGetAllParam() {
 		JSONObject jo = new JSONObject();
 		jo.put("eid", this.EID);
-		jo.put("begin", 0);
-		jo.put("count", 100);
+		jo.put("begin", 5);
+		jo.put("count", 5);
 		return jo.toString();
 	}
 
@@ -223,7 +254,6 @@ public class PersonSyncApiTest {
 		person.setDepartment("中国\\决策部2\\ceo");
 		person.setLongName("中国\\决策部2\\ceo");
 		person.setJobTitle("总经理");
-		person.setPhones("18905158701");
 		// person.setOpenId("595cd2ae-6b0e-11e4-9ba3-000c29e6569e");
 		// person.jobTitle="CEO";
 		persons.add(person);
@@ -239,7 +269,8 @@ public class PersonSyncApiTest {
 			byte[] b = FileUtils.readFileToByteArray(new File(path + EID + ".key"));
 			PrivateKey restorePublicKey = RSAUtils.restorePrivateKey(b);
 			byte[] bytes = Base64.encodeBase64(RSAUtils.encryptLarger(data.getBytes("utf-8"), restorePublicKey));
-			return new String(bytes, "UTF-8");
+			String temp =new String(bytes, "UTF-8");
+			return temp;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -262,33 +293,6 @@ public class PersonSyncApiTest {
 		return jo.toString();
 	}
 
-	private String setPerson() {
-		PersonData2DTO p = new PersonData2DTO();
-		p.setEid(this.EID);
-		List<Person> persons = new ArrayList<Person>();
-		Person person = new Person();
-		 person.setName("ddddd");
-		// person.setEmail("hello@hotmail.com");
-		// person.photoUrl="";
-		// person.setPhone("000000003041");
-		// person.phones="";
-		// person.setIsHidePhone("0");
-		// person.setPassword("iworld2013");
-		// person.status = "1";
-		person.gender = "0";
-		person.setDepartment("10000");
-		// person.setLongName("金蝶中国\\决策部2\\ceo");
-		person.setJobTitle("实施经理");
-//		person.setWeights(33);
-		person.setPhone("18905158703");
-//		person.setOpenId(this.openId);
-		// person.jobTitle="CEO";
-		persons.add(person);
-		p.setPersons(persons);
-		JSONObject jo = JSONObject.fromObject(p);
-
-		return jo.toString();
-	}
 
 	/**
 	 * 通过openId或者手机号获取人员信息
@@ -344,23 +348,24 @@ public class PersonSyncApiTest {
 	private String addcasvirparam() {
 		JSONObject jo = new JSONObject();
 		jo.put("eid", this.EID);
-		// jo.put("type", 1);
-		jo.put("type", 0);
+		 jo.put("type", 1);
+//		jo.put("type", 0);
 		JSONArray ar = new JSONArray();
 		JSONObject t1 = new JSONObject();
 		t1.put("department", "10000");
-		t1.put("user", "81b9f322-39a0-11e6-8825-005056ac6b20"); // openId
-		// t1.put("user", "18566684664"); // phone
+//		t1.put("user", "81b9f322-39a0-11e6-8825-005056ac6b20"); // openId
+		 t1.put("user", "18566684664"); // phone
 		t1.put("jobTitle", "测试");
-		t1.put("weights", -2);
-		JSONObject t2 = new JSONObject();
-		t2.put("department", "10000");
-		// t2.put("user", "18028752937"); // phone
-		t2.put("user", "81b88ebc-39a0-11e6-8825-005056ac6b20"); // openId
-		t2.put("jobTitle", "测试");
-		t2.put("weights", -1);
+		t1.put("weights", 2147483647);
 		ar.add(t1);
-		ar.add(t2);
+		
+//		JSONObject t2 = new JSONObject();
+//		t2.put("department", "10000");
+//		// t2.put("user", "18028752937"); // phone
+//		t2.put("user", "81b88ebc-39a0-11e6-8825-005056ac6b20"); // openId
+//		t2.put("jobTitle", "测试");
+//		t2.put("weights", -1);
+//		ar.add(t2);
 		jo.put("list", ar);
 		return jo.toString();
 	}
@@ -379,28 +384,29 @@ public class PersonSyncApiTest {
 	private String updatecasvirparam() {
 		JSONObject jo = new JSONObject();
 		jo.put("eid", this.EID);
-		// jo.put("type", 1);
-		jo.put("type", 0);
+		 jo.put("type", 1);
+//		jo.put("type", 0);
 		JSONArray ar = new JSONArray();
 		JSONObject t1 = new JSONObject();
 		t1.put("department", "10000");
-		t1.put("todepartment", "10000");
-		t1.put("user", "81b9f322-39a0-11e6-8825-005056ac6b20"); // openId
-		// t1.put("user", "18566684664"); // phone
-		t1.put("jobTitle", "开发");
-		t1.put("tojobTitle", "开发");
-		t1.put("toweights", -44);
-
-		JSONObject t2 = new JSONObject();
-		t2.put("department", "10000");
-		t2.put("todepartment", "10000");
-		// t2.put("user", "18028752937"); // phone
-		t2.put("user", "81b88ebc-39a0-11e6-8825-005056ac6b20"); // openId
-		t2.put("jobTitle", "开发");
-		t2.put("tojobTitle", "开发");
-		t2.put("toweights", -55);
+		t1.put("todepartment", "");
+//		t1.put("user", "81b9f322-39a0-11e6-8825-005056ac6b20"); // openId
+		 t1.put("user", "18566684664"); // phone18566684664
+		t1.put("jobTitle", "测试");
+		t1.put("tojobTitle", "测试");
+		t1.put("toweights", -10);
 		ar.add(t1);
-		ar.add(t2);
+		
+//		JSONObject t2 = new JSONObject();
+//		t2.put("department", "10000");
+//		t2.put("todepartment", "10000");
+//		// t2.put("user", "18028752937"); // phone
+//		t2.put("user", "81b88ebc-39a0-11e6-8825-005056ac6b20"); // openId
+//		t2.put("jobTitle", "开发");
+//		t2.put("tojobTitle", "开发");
+//		t2.put("toweights", -55);
+//		ar.add(t2);
+		
 		jo.put("list", ar);
 		return jo.toString();
 	}

@@ -15,7 +15,20 @@ import com.lightdemo.rss.model.News;
 
 public class Test {
 	public static void main(String[] args) {
-		
+		int partnerType = 1;
+		String orgLongName = null;
+		String companyName = "测试工作圈";
+		String PARTNERNAME = "商务伙伴";
+		String department = "";
+		if(partnerType == 1) {
+			orgLongName = companyName+ "!" + PARTNERNAME + "!" + department;
+		} else {
+			orgLongName = companyName + "!" + department;
+		}
+		if(StringUtils.isEmpty(department)) {
+			orgLongName = orgLongName.substring(0, orgLongName.length()-1);
+		}
+		System.out.println(orgLongName);
 	}
 	
 	
