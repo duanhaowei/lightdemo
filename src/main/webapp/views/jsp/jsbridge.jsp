@@ -62,7 +62,9 @@
   			<button type="button" class="btn btn-default" id="selectPerson">选择单人</button>
   			
   			<button type="button" class="btn btn-default" id="useragent">验证UserAgent</button>
-  			
+  			<div>
+				<textarea  id="userAgent" rows="5" cols="20"></textarea>
+  			</div>
 		</div>
       </div>
 
