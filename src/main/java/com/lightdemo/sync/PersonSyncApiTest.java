@@ -43,9 +43,9 @@ public class PersonSyncApiTest {
 	public static void main(String[] args) {
 		PersonSyncApiTest psa = new PersonSyncApiTest();
 		try {
-//			 psa.getAllPersons();
+			 psa.getAllPersons();
 //			 psa.addPerson();
-			 psa.updatePersonInfo();
+//			 psa.updatePersonInfo();
 
 //			 psa.addDept();
 

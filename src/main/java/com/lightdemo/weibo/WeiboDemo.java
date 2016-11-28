@@ -51,10 +51,19 @@ public class WeiboDemo {
 //			wb.fetchWeibo();
 //			wb.sendWeibo();
 			wb.getTOken();
+//			wb.getUserInfo();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	private void getUserInfo() throws Exception{
+		String url = "/snsapi/users/show.json";
+		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
+		Response res = http.post(weiboUrl + url, new PostParameter[]{new PostParameter("screen_name", "刘成俊 ")}, true);
+		String result = res.getResponseAsString();
+		System.out.println("返回结果是：" + result);
+	}
+
 	private void getTOken()  throws WeiboException{
 		try {
 			HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();

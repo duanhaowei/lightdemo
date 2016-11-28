@@ -50,7 +50,7 @@ public class PropertiesUtil {
     	for(Entry<Object, Object> temp : set) {
     		String key = (String) temp.getKey();
     		String value = (String) temp.getValue();
-    		json.put(key, value);
+    		json.put(key, value.trim());
     	}
     	return JSONObject.toBean(json, cla);
     }
