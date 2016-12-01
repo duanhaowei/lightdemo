@@ -46,19 +46,38 @@ public class PersonSyncApiTest {
 			 psa.getAllPersons();
 //			 psa.addPerson();
 //			 psa.updatePersonInfo();
-
 //			 psa.addDept();
-
 //			 psa.getallcasvir();
 //			 psa.getcasvir();
 //			 psa.addcasvir();
 //			 psa.updatecasvir();
 //			 psa.deletecasvir();
-			
+//			 psa.updatePersonStatus();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void updatePersonStatus() throws Exception{
+		String url = host + "/openaccess/input/person/updateStatus";
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("nonce", String.valueOf(new Date().getTime())));
+		nvps.add(new BasicNameValuePair("eid", EID));
+		
+		JSONObject obj = new JSONObject();
+		obj.put("openId", this.openId);
+		obj.put("type", "1");
+		
+		JSONArray jsonay = new JSONArray();
+		jsonay.add(obj);
+		
+		JSONObject param = new JSONObject();
+		param.put("eid", EID);
+		param.put("persons", jsonay.toString());
+		nvps.add(new BasicNameValuePair("data", enyte(param.toString())));
+		String reponse = Utils.sendPost(url, nvps);
+		System.out.println(reponse);
 	}
 
 	/**
@@ -97,14 +116,13 @@ public class PersonSyncApiTest {
 		p.setEid(this.EID);
 		List<Person> persons = new ArrayList<Person>();
 		Person person = new Person();
-		person.setName("Hello");
-		person.setPhone("18028752933");
+		person.setName("陈俊全——测试");
+		person.setPhone("18028751818");
 		person.setEmail("hello@hotmail.com");
 		person.setIsHidePhone("0");
 //		person.setStatus("1");
 		person.setGender("0");
-		person.setDepartment("北京");
-		person.setJobTitle("实施经理");
+		person.setDepartment("分公司");
 		person.setWeights(33);
 		person.setJobTitle("CEO");
 		person.setOrgUserType(1);
@@ -206,9 +224,9 @@ public class PersonSyncApiTest {
 		
 		JSONArray ar = new JSONArray();
 		JSONObject per = new JSONObject();
-		per.put("openId", "eb119070-999a-11e6-8825-005056ac6b20");
-		per.put("name", "泰山");
-		per.put("jobTitle", "实施交付经理人");
+		per.put("openId", this.openId);
+		per.put("name", "陈俊全--管理");
+		per.put("jobTitle", "CTO");
 		per.put("weights", 15);
 		per.put("orgUserType", 0);
 		ar.add(per);
@@ -222,8 +240,8 @@ public class PersonSyncApiTest {
 	private String personGetAllParam() {
 		JSONObject jo = new JSONObject();
 		jo.put("eid", this.EID);
-		jo.put("begin", 5);
-		jo.put("count", 5);
+		jo.put("begin", 0);
+		jo.put("count", 500);
 		return jo.toString();
 	}
 

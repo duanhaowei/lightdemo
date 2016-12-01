@@ -16,7 +16,7 @@ public class Common {
 	private String MSGID;
 	private String CONSUMERKEY;
 	private String CONSUMERSECRET;
-	private String EMAIL;
+	private String ACCOUNT;
 	private String PASSWORD;
 	
 	public String getAPPID() {
@@ -85,11 +85,11 @@ public class Common {
 	public void setCONSUMERSECRET(String cONSUMERSECRET) {
 		CONSUMERSECRET = cONSUMERSECRET;
 	}
-	public String getEMAIL() {
-		return EMAIL;
+	public String getACCOUNT() {
+		return ACCOUNT;
 	}
-	public void setEMAIL(String eMAIL) {
-		EMAIL = eMAIL;
+	public void setACCOUNT(String aCCOUNT) {
+		ACCOUNT = aCCOUNT;
 	}
 	public String getPASSWORD() {
 		return PASSWORD;

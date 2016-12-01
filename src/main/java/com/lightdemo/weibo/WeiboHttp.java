@@ -13,7 +13,7 @@ public class WeiboHttp {
 	private String weiboUrl;
 	private String consumerKey;
 	private String consumerSecret;
-	private String email;
+	private String account;
 	private String password;
 	
 	
@@ -22,7 +22,7 @@ public class WeiboHttp {
 		this.weiboUrl = cm.getWEIBOSERVER();
 		this.consumerKey = cm.getCONSUMERKEY();
 		this.consumerSecret = cm.getCONSUMERSECRET();
-		this.email = cm.getEMAIL();
+		this.account = cm.getACCOUNT();
 		this.password = cm.getPASSWORD();
 	}
 	public static WeiboHttp getInstance(){
@@ -40,9 +40,9 @@ public class WeiboHttp {
 	    http.setAccessTokenURL(apiURL+"/oauth/access_token");
 	    http.setAuthorizationURL(apiURL+"/oauth/authorize");
 	    http.setOAuthConsumer(consumerKey, consumerSecret);//替换成自己申请的应用专属key和secret的
-	    http.getXAuthAccessToken(email, password, "client_auth");//使用用户名和密码验证
+	    http.getXAuthAccessToken(account, password, "client_auth");//使用用户名和密码验证
 //	    http.setToken(token, tokenSecret);//直接使用现成的token验证
-	    System.out.println("email: " + email +"  password: " + password);
+	    System.out.println("account: " + account +"  password: " + password);
 	    System.out.println("consumerKey: " + consumerKey +"  consumerSecret: " + consumerSecret);
 	    return http;
 	    //第一次用用户名和密码交换到accessToken后，不需要再用用户名密码，直接用accessToken即可，

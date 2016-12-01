@@ -27,7 +27,7 @@ public class WeiboDemo {
 	private static WeiboHttp instance;
 	private String consumerKey;
 	private String consumerSecret;
-	private String email;
+	private String account;
 	private String password;
 	private String networkId;
 	
@@ -36,7 +36,7 @@ public class WeiboDemo {
 		this.weiboUrl = cm.getWEIBOSERVER();
 		this.consumerKey = cm.getCONSUMERKEY();
 		this.consumerSecret = cm.getCONSUMERSECRET();
-		this.email = cm.getEMAIL();
+		this.account = cm.getACCOUNT();
 		this.password = cm.getPASSWORD();
 		this.networkId = "101";
 	}
@@ -50,12 +50,24 @@ public class WeiboDemo {
 //			wb.uploadProfileImageByHUrl("18028752937",wb.networkId,img1);
 //			wb.fetchWeibo();
 //			wb.sendWeibo();
-			wb.getTOken();
+//			wb.getTOken();
 //			wb.getUserInfo();
+			wb.addGroupMember();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	private void addGroupMember() throws Exception{
+		String url = "/snsapi/group/add_member.json";
+		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
+		Response res = http.post(weiboUrl + url, new PostParameter[]{
+				new PostParameter("group_id", "57ee2e8284ae4611184bdb2b"),
+				new PostParameter("user_ids", "9cd96d10-7e46-11e6-8825-005056ac6b20"),
+				}, true);
+		String result = res.getResponseAsString();
+		System.out.println("返回结果是：" + result);
+	}
+
 	private void getUserInfo() throws Exception{
 		String url = "/snsapi/users/show.json";
 		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
@@ -67,7 +79,7 @@ public class WeiboDemo {
 	private void getTOken()  throws WeiboException{
 		try {
 			HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
-			Response res = http.httpRequest(weiboUrl + "/snsapi/oauth/weblogin_token?operator="+"18028752937",null,true,"GET");
+			Response res = http.httpRequest(weiboUrl + "/snsapi/oauth/weblogin_token?operator="+"15773176023",null,true,"GET");
 			weibo4j.org.json.JSONObject json = res.asJSONObject();
 			if(json.getString("success").equals("true")){
 				String url= weiboUrl+"/snsapi/oauth/login?lgtk="+json.getString("lgtk")+"&to=%2fmicroblog";
