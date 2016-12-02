@@ -58,11 +58,20 @@ public class WeiboDemo {
 		}
 	}
 	private void addGroupMember() throws Exception{
-		String url = "/snsapi/group/add_member.json";
+		/*String url = "/snsapi/group/add_member.json";
 		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
 		Response res = http.post(weiboUrl + url, new PostParameter[]{
 				new PostParameter("group_id", "57ee2e8284ae4611184bdb2b"),
 				new PostParameter("user_ids", "9cd96d10-7e46-11e6-8825-005056ac6b20"),
+				}, true);
+		String result = res.getResponseAsString();
+		System.out.println("返回结果是：" + result);*/
+		
+		String url = "/snsapi/group/add_member.json";
+		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
+		Response res = http.post(weiboUrl + url, new PostParameter[]{
+				new PostParameter("group_id", "57ee2e8284ae4611184bdb2b"),
+				new PostParameter("user_ids", "0b3c97d8-73ce-11e6-8825-005056ac6b20"),
 				}, true);
 		String result = res.getResponseAsString();
 		System.out.println("返回结果是：" + result);
