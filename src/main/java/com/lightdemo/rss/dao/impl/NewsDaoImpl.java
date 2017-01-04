@@ -19,7 +19,7 @@ public class NewsDaoImpl extends JdbcDaoSupport implements NewsDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public News findNews(String id) {
-		String sqlStr = "select * from news where id=?";
+		String sqlStr = "select *,date_format(pubDate,'%Y-%m-%d %H:%I:%S') as pubDateStr from news where id=?";
 		List<News> list = this.getJdbcTemplate().query(sqlStr,	new Object[]{id}, new NewsMapper());
 		if(null != list) {
 			return list.get(0);
@@ -37,7 +37,7 @@ public class NewsDaoImpl extends JdbcDaoSupport implements NewsDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<News> findByLink(String link) {
-		String sql = "select * from news where link=?";
+		String sql = "select *,date_format(pubDate,'%Y-%m-%d %H:%I:%S') as pubDateStr from news where link=?";
 		List<News> list = this.getJdbcTemplate().query(sql,
 				new Object[]{link}, new NewsMapper());
 		return list;
@@ -66,7 +66,7 @@ public class NewsDaoImpl extends JdbcDaoSupport implements NewsDao {
 
 	@Override
 	public List<News> findNewsGtDate(Date date) {
-		String sqlStr = "select * from news where pubDate > ?";
+		String sqlStr = "select *,date_format(pubDate,'%Y-%m-%d %H:%I:%S') as pubDateStr from news where pubDate > ?";
 		List<News> list = this.getJdbcTemplate().query(sqlStr,	new Object[]{date}, new NewsMapper());
 		if(null != list) {
 			return list;

@@ -7,18 +7,21 @@ public class News {
 	private String title;
 	private String link;
 	private Date pubDate;
+	private String pubDateStr;
 	private String description;
 	public News() {
 		super();
 	}
 	
-	public News(String id, String title, String link, Date pubDate, String description) {
+	public News(String id, String title, String link, 
+			Date pubDate, String description, String pubDateStr) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.link = link;
 		this.pubDate = pubDate;
 		this.description = description;
+		this.pubDateStr = pubDateStr;
 	}
 	
 	public String getId() {
@@ -56,4 +59,13 @@ public class News {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public String getPubDateStr() {
+		return pubDateStr;
+	}
+
+	public void setPubDateStr(String pubDateStr) {
+		this.pubDateStr = pubDateStr;
+	}
+	
 }

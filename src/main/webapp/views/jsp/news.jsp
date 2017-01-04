@@ -48,7 +48,7 @@
 					<div id="desc_${item.id}" class="mui-card-content-inner">${item.description}<a href="${item.link}">【点击查看全文】</a></div>
 					<!--页脚，放置补充信息或支持的操作-->
 					<div class="mui-card-footer">
-						<div>${item.pubDate}</div>
+						<div>${item.pubDateStr}</div>
 						<div><button class="share" value="${item.id}">分享</button></div>
 						<c:if test="${admin == true}">
 						   <div><button class="shareall" value="${item.id}">广播</button></div>

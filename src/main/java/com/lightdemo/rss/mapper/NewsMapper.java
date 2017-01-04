@@ -24,6 +24,7 @@ public class NewsMapper implements RowMapper{
 			if(null != rs.getDate("pubDate"))
 				ns.setPubDate(new Date(rs.getDate("pubDate").getTime()));
 			ns.setTitle(rs.getString("title"));
+			ns.setPubDateStr(rs.getString("pubDateStr"));
 			return ns;
 		}
 		return null;
