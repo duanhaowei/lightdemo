@@ -129,8 +129,7 @@ public class MsgSend {
 				msgJson.put("pic", FileUtil.encodeBase64File(imgFilePath));
 				list.add(msgJson);
 				msg.put("model", 2);
-				msg.put("todo", 1);
-				msg.put("todoPriStatus", "undo");
+				msg.put("todo", 0);
 //				msg.put("sourceid", sourceId);
 				msg.put("appid", APPID);
 				msg.put("list", list);
