@@ -12,8 +12,17 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <link rel="stylesheet" href="/lightdemo/views/css/mui.min.css">
+<link rel="stylesheet" href="://yunzhijia.com/openplatform/yunui/dest/yunui.css">
 </head>
 <body>
+	<div class="yzjui-loading-wrap yzjui-wrap">
+		<div class="yzjui-loading-container">
+			<div class="yzjui-loading">
+				<div class="yzjui-loading-inner"></div>
+			</div>
+			<p class="loading-word">加载中</p>
+		</div>
+	</div>
 </body>
 <script src="/lightdemo/views/js/mui.min.js"></script>
 <script src="/lightdemo/views/js/new.js"></script>

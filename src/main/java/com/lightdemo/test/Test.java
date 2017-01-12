@@ -1,7 +1,9 @@
 package com.lightdemo.test;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,7 +17,7 @@ import com.lightdemo.rss.model.News;
 
 public class Test {
 	public static void main(String[] args) {
-		int partnerType = 1;
+		/*int partnerType = 1;
 		String orgLongName = null;
 		String companyName = "测试工作圈";
 		String PARTNERNAME = "商务伙伴";
@@ -28,7 +30,12 @@ public class Test {
 		if(StringUtils.isEmpty(department)) {
 			orgLongName = orgLongName.substring(0, orgLongName.length()-1);
 		}
-		System.out.println(orgLongName);
+		System.out.println(orgLongName);*/
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("hello", "java");
+		map.put("hello1", "C");
+		map.put("hello2", "php");
+		System.out.println(map);
 	}
 	
 	

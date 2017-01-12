@@ -53,8 +53,8 @@ public class NewsController {
 	@Value("${PUBACC_KEY}")
 	private String PUBACC_KEY;
 	
-	String imgName = "小兔子.png";
-	String imgFilePath= "C:/Users/chen/Pictures/小兔子.png";
+	String imgName = "timg.jpg";
+	String imgFilePath= "timg.jpg";
 
 	private NewsService newsService;
 
@@ -171,7 +171,7 @@ public class NewsController {
 	 * @return
 	 */
 	public String postmsg(String title, String text,String link, String users, int type) {
-
+		String path = NewsController.class.getResource("/").getPath();
 		JSONObject reJson = new JSONObject();
 		List<String> toUserList = null;
 		if(null != users) {
@@ -210,13 +210,11 @@ public class NewsController {
 			} else {
 				to.put("user", toUserList);
 			}
-			
-			
 			tos.add(to);
 
 			JSONObject msg = new JSONObject();
 			if(type == 5) {
-				msg.put("url", "http://www.baidu.com");
+				msg.put("url", link);
 				msg.put("appid", APPID);
 				msg.put("todo", 0);
 				msg.put("text", text);
@@ -226,8 +224,8 @@ public class NewsController {
 				msgJson.put("date", nowDate);
 				msgJson.put("title", title);
 				msgJson.put("text", text);
-//				msgJson.put("name", imgName);
-//				msgJson.put("pic", FileUtil.encodeBase64File(imgFilePath));
+				msgJson.put("name", imgName);
+				msgJson.put("pic", FileUtil.encodeBase64File(path+"/"+imgFilePath));
 				msgJson.put("url", link);
 				msgJson.put("appid", APPID);
 				

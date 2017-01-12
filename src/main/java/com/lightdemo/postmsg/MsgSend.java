@@ -1,13 +1,4 @@
 package com.lightdemo.postmsg;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
 /**
  * 发送消息控制类
  * @author cjqbrave@163.com
@@ -17,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.http.NameValuePair;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,8 +38,11 @@ public class MsgSend {
 	private String APPID;
 	public static int DEFAULT_BUFFER_SIZE = 1024;
 	
-	String imgName = "小兔子.png";
-	String imgFilePath= "C:/111.png";
+	String imgName = "timg.jpg";
+	String imgFilePath= "timg.jpg";
+	
+	String imgName1 = "timg1.jpg";
+	String imgFilePath1= "timg1.jpg";
 	
 	@RequestMapping(value = { "msgmain" })
 	public String msgmain(){
@@ -75,19 +69,21 @@ public class MsgSend {
 	 * @return
 	 */
 	public String postmsg(String text, String users, int type, String sourceId) {
-
+		String path = MsgSend.class.getResource("/").getPath();
 		JSONObject reJson = new JSONObject();
 		List<String> toUserList = null;
-		if(users.contains(",")) {
-			String[] arr = users.split(",");
-			toUserList = new ArrayList<String>(arr.length);
-			for(String obj : arr){
-				toUserList.add(obj);
+		if(!StringUtils.isBlank(users)) {
+			if(users.contains(",")) {
+				String[] arr = users.split(",");
+				toUserList = new ArrayList<String>(arr.length);
+				for(String obj : arr){
+					toUserList.add(obj);
+				}
+			} else{
+				toUserList = new ArrayList<String>(1);
+				toUserList.add(users);
 			}
-		} else{
-			toUserList = new ArrayList<String>(1);
-			toUserList.add(users);
-		}
+		} 
 		
 		try {
 			String random = String.valueOf(Math.random() * 100);
@@ -107,28 +103,46 @@ public class MsgSend {
 			JSONArray tos = new JSONArray();
 			JSONObject to = new JSONObject();
 			to.put("no", EID);
-			to.put("user", toUserList);
-			to.put("code", 2);
+			if(null != toUserList) {
+				to.put("user", toUserList);
+				to.put("code", 2);
+			} else {
+				to.put("code", "all");
+			}
 			tos.add(to);
 
 			JSONObject msg = new JSONObject();
 			if(type == 5) {
-				msg.put("url", "http://www.baidu.com");
+				msg.put("url", "http://www.yunzhijia.com/home");
 				msg.put("appid", APPID);
-				msg.put("todo", 1);
-				msg.put("todoPriStatus", "undo");
-				msg.put("sourceid", sourceId);
+				msg.put("todo", 0);
+//				msg.put("todo", 1);
+//				msg.put("todoPriStatus", "undo");
+				if(!StringUtils.isBlank(sourceId)) {
+					msg.put("sourceid", sourceId);
+				}
 				msg.put("text", text);
 			} else if(type == 6) {
 				JSONArray list = new JSONArray();
 				JSONObject msgJson = new JSONObject();
-				msgJson.put("date", nowDate);
-				msgJson.put("title", "标题");
-				msgJson.put("text", "测试图文消息");
+//				msgJson.put("date", nowDate);
+				msgJson.put("title", "红包来袭，动起来");
+				msgJson.put("text", text);
 				msgJson.put("name", imgName);
-				msgJson.put("pic", FileUtil.encodeBase64File(imgFilePath));
+				msgJson.put("pic", FileUtil.encodeBase64File(path+"/"+imgFilePath));
+				msgJson.put("url", "http://www.yunzhijia.com/home");
+				
+				JSONObject msgJson1 = new JSONObject();
+//				msgJson1.put("date", nowDate);
+//				msgJson1.put("title", "鞭炮响");
+				msgJson1.put("text", "鞭炮起源至今有1000多年的历史。在没有火药和纸张时，古代人便用火烧竹子，使之爆裂发声，以驱逐瘟神。");
+				msgJson1.put("name", imgName1);
+				msgJson1.put("pic", FileUtil.encodeBase64File(path+"/"+imgFilePath1));
+				msgJson1.put("url", "http://www.yunzhijia.com/home");
+				
 				list.add(msgJson);
-				msg.put("model", 2);
+				list.add(msgJson1);
+				msg.put("model", 3);
 				msg.put("todo", 0);
 //				msg.put("sourceid", sourceId);
 				msg.put("appid", APPID);
@@ -183,7 +197,8 @@ public class MsgSend {
 		ms.PUBACC = cm.getPUBACC();
 		ms.PUBACC_KEY = cm.getPUBACC_KEY();
 		ms.APPID = cm.getAPPID();
-		ms.postmsg(System.currentTimeMillis()+"",cm.getOPENIDS(), 5, cm.getMSGID());
+//		ms.postmsg("红包来了，抢红包啦...",cm.getOPENIDS(), 5, cm.getMSGID());
+		ms.postmsg("红包来了，抢红包啦...",cm.getOPENIDS(), 6, cm.getMSGID());
 //		ms.changeMsgTodoStatus(cm.getOPENIDS(), cm.getMSGID());
 	}
 	
