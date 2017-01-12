@@ -23,7 +23,7 @@ public interface NewsDao {
 	 * @param date
 	 * @return
 	 */
-	public List<News> findNewsGtDate(Date date);
+	public List<News> findNewsGtDate(int start, int limit);
 	
 	/**
 	 * 通过openId获取管理员

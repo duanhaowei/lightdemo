@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,28 +66,37 @@ public class NewsController {
 	@RequestMapping(value = "/shownew", method = RequestMethod.GET)
 	public ModelAndView shownew(HttpServletRequest req, HttpServletResponse rep) {
 		String ticket = req.getParameter("ticket");
-		
+		boolean adm = false;
 		JSONObject perJson = getPersonName(ticket);
 		String openId = (String) perJson.get("openid");
-		boolean adm = newsService.isDeptAdmin(openId);
-		
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE,   -1);
-		
-		List<News> list = newsService.findNewsGtDate(cal.getTime());
-		
+		adm = newsService.isDeptAdmin(openId);
+		HttpSession session = req.getSession();
+		session.setAttribute("openId", openId);
+		session.setAttribute("isadmin", adm);
 		ModelAndView mav = new ModelAndView("news");
-		if(adm) {
-			mav.addObject("admin", true);
-		} else  {
-			mav.addObject("admin", false);
-		}
-		mav.addObject("list", list);
-		mav.addObject("appId", APPID);
-		mav.addObject("appName", appName);
 		return mav;
 	}
-	
+	@RequestMapping(value = "/nextshownew", method = RequestMethod.GET)
+	public @ResponseBody String nextshownew(
+			HttpServletRequest req, 
+			HttpServletResponse rep, 
+			@RequestParam(defaultValue = "0")int start, 
+			@RequestParam(defaultValue = "20")int limit) {
+		HttpSession session = req.getSession();
+		String openId = (String) session.getAttribute("openId");
+		boolean adm =  (boolean) session.getAttribute("isadmin");
+		List<News> list = newsService.findNewsGtDate(start, limit);
+		JSONObject mav = new JSONObject();
+		if(adm) {
+			mav.put("admin", true);
+		} else  {
+			mav.put("admin", false);
+		}
+		mav.put("list", list);
+		mav.put("appId", APPID);
+		mav.put("appName", appName);
+		return mav.toString();
+	}
 	@RequestMapping(value = "/echart", method = RequestMethod.GET)
 	public ModelAndView shownewsechart(HttpServletResponse rep) {
 		ModelAndView mav = new ModelAndView("echarts");

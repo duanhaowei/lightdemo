@@ -62,6 +62,6 @@ public interface NewsService {
 	 * @param date
 	 * @return
 	 */
-	public List<News> findNewsGtDate(Date date);
+	public List<News> findNewsGtDate(int start, int limit);
 
 }

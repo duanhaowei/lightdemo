@@ -65,9 +65,9 @@ public class NewsDaoImpl extends JdbcDaoSupport implements NewsDao {
 	}
 
 	@Override
-	public List<News> findNewsGtDate(Date date) {
-		String sqlStr = "select *,date_format(pubDate,'%Y-%m-%d %H:%I:%S') as pubDateStr from news where pubDate > ?";
-		List<News> list = this.getJdbcTemplate().query(sqlStr,	new Object[]{date}, new NewsMapper());
+	public List<News> findNewsGtDate(int start, int limit) {
+		String sqlStr = "select *,date_format(pubDate,'%Y-%m-%d %H:%I:%S') as pubDateStr from news order by pubDate desc limit ?, ? ";
+		List<News> list = this.getJdbcTemplate().query(sqlStr,	new Object[]{start, limit}, new NewsMapper());
 		if(null != list) {
 			return list;
 		}

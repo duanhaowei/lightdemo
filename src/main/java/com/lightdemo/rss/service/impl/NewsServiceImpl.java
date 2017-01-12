@@ -247,7 +247,7 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public List<News> findNewsGtDate(Date date) {
-		return newsDao.findNewsGtDate(date);
+	public List<News> findNewsGtDate(int start, int limit) {
+		return newsDao.findNewsGtDate(start, limit);
 	}
 }

@@ -138,6 +138,28 @@ public class RSAUtils {
 		System.arraycopy(encryptedData, 0, result, encryptedSecretKey.length, encryptedData.length);
 		return result;
 	}
+	
+	public static byte[] encryptLargerDefined(byte[] data, Key key) throws Exception {
+
+		SecureRandom random = new SecureRandom();
+		byte[] secretKey = new byte[16];
+		random.nextBytes(secretKey);
+		
+		javax.crypto.Cipher rsa = javax.crypto.Cipher.getInstance("RSA/ECB/PKCS1Padding");
+		rsa.init(javax.crypto.Cipher.ENCRYPT_MODE, key);
+		byte[] ciphedKey = rsa.doFinal(secretKey);	
+
+		javax.crypto.Cipher aes = javax.crypto.Cipher.getInstance("AES/ECB/PKCS5Padding");
+		SecretKeySpec sks = new SecretKeySpec(secretKey, "AES");
+		aes.init(Cipher.ENCRYPT_MODE, sks);
+		byte[] ciphedData = aes.doFinal(data);
+
+		byte[] result = new byte[ciphedKey.length + ciphedData.length];
+		System.arraycopy(ciphedKey, 0, result, 0, ciphedKey.length);
+		System.arraycopy(ciphedData, 0, result, ciphedKey.length, ciphedData.length);
+		
+		return result;
+	}
 
 	/**
 	 * 大数据解密(RSA+AES解密)

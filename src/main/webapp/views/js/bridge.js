@@ -1,5 +1,9 @@
 $(document).ready(function(){
 	var url = "http://yunxt.lightdemo.com";
+	var flg = checkUserAgent();
+	if(flg == true) {
+		$("#jsbridge").removeClass("jsbridgecla");
+	} 
 	
 	$("#translate").click(function(){
 		var txt = $("#srctext").val();
@@ -220,7 +224,7 @@ $(document).ready(function(){
 	function checkUserAgent(){
 		var userAgent = window.navigator.userAgent;
 		$("#userAgent").val(userAgent);
-		if(userAgent.indexOf("clientId:10201")>-1) {
+		if(userAgent.indexOf("projectCode:")==-1) {
 			return false;
 		} else {
 			return true;

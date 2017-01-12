@@ -286,7 +286,7 @@ public class PersonSyncApiTest {
 			String path = PersonSyncApiTest.class.getResource("/").getPath();
 			byte[] b = FileUtils.readFileToByteArray(new File(path + EID + ".key"));
 			PrivateKey restorePublicKey = RSAUtils.restorePrivateKey(b);
-			byte[] bytes = Base64.encodeBase64(RSAUtils.encryptLarger(data.getBytes("utf-8"), restorePublicKey));
+			byte[] bytes = Base64.encodeBase64(RSAUtils.encryptLargerDefined(data.getBytes("utf-8"), restorePublicKey));
 			String temp =new String(bytes, "UTF-8");
 			return temp;
 		} catch (FileNotFoundException e) {
