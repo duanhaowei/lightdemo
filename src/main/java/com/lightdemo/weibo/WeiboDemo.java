@@ -2,11 +2,6 @@ package com.lightdemo.weibo;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
@@ -14,14 +9,18 @@ import com.lightdemo.model.Common;
 import com.lightdemo.util.FileUtil;
 import com.lightdemo.util.PropertiesUtil;
 
-import net.sf.json.JSONObject;
 import weibo4j.WeiboException;
 import weibo4j.httpclient.HttpClient;
 import weibo4j.httpclient.ImageItem;
 import weibo4j.httpclient.PostParameter;
 import weibo4j.httpclient.Response;
 
-
+/**
+ * 注意， GET请求请参考fetchWeibo 这个方法
+ *     POST请求请参考sendWeibo 这个方法
+ * @author junquan_chen
+ *
+ */
 public class WeiboDemo {
 	private String weiboUrl;
 	private static WeiboHttp instance;
@@ -48,15 +47,26 @@ public class WeiboDemo {
 //			wb.uploadProfileImage("18028752937",wb.networkId,"C:/Users/chen/Pictures/u.png");
 //			String img1 = "http://images.missyuan.com/attachments/day_081031/20081031_273ca1dfc0a97651ef26GQvSlLOvnTPN.png";
 //			wb.uploadProfileImageByHUrl("18028752937",wb.networkId,img1);
-//			wb.fetchWeibo();
+			wb.fetchWeibo();
 //			wb.sendWeibo();
 //			wb.getTOken();
 //			wb.getUserInfo();
-			wb.addGroupMember();
+//			wb.addGroupMember();
+//			wb.removeToken();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	private void removeToken()  throws Exception {
+		String url = "/snsapi/client/remove_token.json ";
+		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
+		Response res = http.post(weiboUrl + url, new PostParameter[]{
+				new PostParameter("mobile", "18028752939"),
+				}, true);
+		String result = res.getResponseAsString();
+		System.out.println("返回结果是：" + result);
+	}
+
 	private void addGroupMember() throws Exception{
 		/*String url = "/snsapi/group/add_member.json";
 		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
@@ -124,9 +134,11 @@ public class WeiboDemo {
 	private void fetchWeibo() throws WeiboException{
 		String url = "/snsapi/statuses/public_timeline.json";
 		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
-		Response res = http.post(weiboUrl + url, new PostParameter[]{}, true);
-		String result = res.getResponseAsString();
-		System.out.println("返回结果是：" + result);
+		Response res = null;
+	    {//GET请求
+	       res = http.httpRequest(weiboUrl + url,null,true,"GET");
+	       System.out.println(res.asJSONArray());
+	    }
 	}
 	
 	/**
