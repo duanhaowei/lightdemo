@@ -47,12 +47,14 @@ public class WeiboDemo {
 //			wb.uploadProfileImage("18028752937",wb.networkId,"C:/Users/chen/Pictures/u.png");
 //			String img1 = "http://images.missyuan.com/attachments/day_081031/20081031_273ca1dfc0a97651ef26GQvSlLOvnTPN.png";
 //			wb.uploadProfileImageByHUrl("18028752937",wb.networkId,img1);
-			wb.fetchWeibo();
+//			wb.fetchWeibo();
 //			wb.sendWeibo();
 //			wb.getTOken();
 //			wb.getUserInfo();
 //			wb.addGroupMember();
 //			wb.removeToken();
+//			wb.createGroup();
+//			wb.jsonGroup();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -152,6 +154,31 @@ public class WeiboDemo {
 				new PostParameter("status","今天下了一场很大很大的雨，捉到一条很大很大的雨")}, true);
 		String result = res.getResponseAsString();
 		System.out.println("返回结果是：" + result);
+	}
+	/**
+	 * 创建微博小组
+	 * @throws WeiboException
+	 */
+	private void createGroup() throws WeiboException {
+		String url = "/snsapi/104/group/create.json";
+		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
+		Response res = http.post(weiboUrl + url, new PostParameter[]{
+				new PostParameter("name", "普洱")
+				}, true);
+		System.out.println("返回结果是：" + res.asString());
+	}
+	/**
+	 * 创建小组
+	 * @throws WeiboException
+	 */
+	private void jsonGroup() throws WeiboException{
+		String url = "/snsapi/group/add_member.json";
+		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
+		Response res = http.post(weiboUrl + url, new PostParameter[]{
+				new PostParameter("group_id", "589a66d784aea980f0acad6b"),
+				new PostParameter("user_ids", "5f7bfd99-39a1-11e6-8825-005056ac6b20")
+				}, true);
+		System.out.println("返回结果是：" + res.asJSONArray());
 	}
 	
 	/**
