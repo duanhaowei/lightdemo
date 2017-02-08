@@ -54,7 +54,7 @@ public class WeiboDemo {
 //			wb.addGroupMember();
 //			wb.removeToken();
 //			wb.createGroup();
-//			wb.jsonGroup();
+			wb.jsonGroup();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -172,7 +172,7 @@ public class WeiboDemo {
 	 * @throws WeiboException
 	 */
 	private void jsonGroup() throws WeiboException{
-		String url = "/snsapi/group/add_member.json";
+		String url = "/snsapi/104/group/add_member.json";
 		HttpClient http = WeiboHttp.getInstance().getBaseHttpClient();
 		Response res = http.post(weiboUrl + url, new PostParameter[]{
 				new PostParameter("group_id", "589a66d784aea980f0acad6b"),
